@@ -1,0 +1,10 @@
+const parser = require("./Analizador/parser.js");
+
+let entrada = `
+    2
+    
+    
+    
+`;
+let resultado = parser.parse(entrada);
+console.log(resultado);
