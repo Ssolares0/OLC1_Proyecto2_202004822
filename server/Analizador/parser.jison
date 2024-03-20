@@ -14,6 +14,15 @@ comentarios "//".*;
 %%
 // -----> Reglas Lexicas
 
+"println"                { return 'RPRINTLN'; }
+
+"("                     { return 'PARIZQ'; }
+")"                     { return 'PARDER'; }
+"{"                     { return 'LLAIZQ'; }
+"}"                     { return 'LLADER'; }
+";"                     { return 'PUNTOCOMA'; }
+
+
 {entero}                 { return 'ENTERO'; } 
 {decimal}                { return 'DECIMAL'; }
 {caracter}               { return 'CARACTER'; }
@@ -47,14 +56,29 @@ comentarios "//".*;
 %% // ------> Gramatica
 
 inicio
-	: instruccion EOF {$$=$1; return $$;}
+	: listainstruccion EOF 
+;
+
+listainstruccion 
+    : listainstruccion instruccion
+    | instruccion 
 ;
 
 instruccion
-	: ENTERO	{$$ = $1;}
-    | DECIMAL	{$$ = $1;}
-    | CARACTER	{$$ = $1;}
-    | CADENA	{$$ = $1;}
-    | BOOL		{$$ = $1;}
+	: print
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
+;
+
+print
+    : RPRINTLN PARIZQ expresion PARDER PUNTOCOMA {console.log($3);}
+    
+;
+
+expresion 
+    : ENTERO {$$=$1;}
+    | DECIMAL {$$=$1;}
+    | CARACTER {$$=$1;}
+    | CADENA {$$=$1;}
+    | BOOL {$$=$1;}
+    | VARIABLES {$$=$1;}
 ;
