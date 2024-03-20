@@ -14,21 +14,24 @@ comentarios "//".*;
 %%
 // -----> Reglas Lexicas
 
-"println"                { return 'RPRINTLN'; }
-
+"println"               { return 'RPRINTLN'; }
 "("                     { return 'PARIZQ'; }
 ")"                     { return 'PARDER'; }
 "{"                     { return 'LLAIZQ'; }
 "}"                     { return 'LLADER'; }
 ";"                     { return 'PUNTOCOMA'; }
-
-
-{entero}                 { return 'ENTERO'; } 
-{decimal}                { return 'DECIMAL'; }
-{caracter}               { return 'CARACTER'; }
-{cadena}                 { return 'CADENA'; }
-{bool}                   { return 'BOOL'; }
-{variables}              { return 'VARIABLES'; }
+"+"                     { return 'MAS'; }
+"-"                     { return 'MENOS'; }
+"*"                     { return 'POR'; }
+"/"                     { return 'DIV'; }
+"%"                     { return 'MOD'; }
+"="                     { return 'IGUAL'; }
+{entero}                { return 'ENTERO'; } 
+{decimal}               { return 'DECIMAL'; }
+{caracter}              { return 'CARACTER'; }
+{cadena}                { return 'CADENA'; }
+{bool}                  { return 'BOOL'; }
+{variables}             { return 'VARIABLES'; }
 
 {comentarios}               {}
 [/][][^][]+([^/][^][]+)*[/] {}
@@ -47,7 +50,14 @@ comentarios "//".*;
 // ################## ANALIZADOR SINTACTICO ######################
 // -------> Precedencia
 
-//%left 'MAS' 'MENOS'
+%{
+    const Dato = require('../Interprete/expresion/Dato.js');
+    const Print = require('../Interprete/instruccion/print.js');
+    const Aritmetica =require('../Interprete/expresion/Aritmetica.js');
+%}
+
+%left 'MAS' 
+%left 'POR'
 
 // -------> Simbolo Inicial
 %start inicio
@@ -56,29 +66,31 @@ comentarios "//".*;
 %% // ------> Gramatica
 
 inicio
-	: listainstruccion EOF 
+	: listainstruccion EOF  {$$=$1; return $$;}
 ;
 
 listainstruccion 
-    : listainstruccion instruccion
-    | instruccion 
+    : listainstruccion instruccion   { $$ = $1; $$.push($2);}
+    | instruccion                    {$$=[]; $$.push($1);} 
 ;
 
 instruccion
-	: print
+	: print  {$$=$1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
 
 print
-    : RPRINTLN PARIZQ expresion PARDER PUNTOCOMA {console.log($3);}
+    : RPRINTLN PARIZQ expresion PARDER PUNTOCOMA {$$=new Print($3);}
     
 ;
 
 expresion 
-    : ENTERO {$$=$1;}
-    | DECIMAL {$$=$1;}
-    | CARACTER {$$=$1;}
-    | CADENA {$$=$1;}
-    | BOOL {$$=$1;}
+    : ENTERO {$$=new Dato($1,'ENTERO');}
+    | DECIMAL {$$=new Dato($1,'DOUBLE');}
+    | CARACTER {$$=new Dato($1,'CHAR');}
+    | CADENA {$$=new Dato($1,'STRING');}
+    | BOOL {$$=new Dato($1,'BOOL');}
     | VARIABLES {$$=$1;}
+    | expresion MAS expresion {$$=new Aritmetica($1,$3,$2);}
+    | expresion POR expresion {$$=new Aritmetica($1,$3,$2);}
 ;
