@@ -86,7 +86,7 @@ print
 
 expresion 
     : ENTERO {$$=new Dato($1,'ENTERO');}
-    | DECIMAL {$$=new Dato($1,'DOUBLE');}
+    | DECIMAL {$$=new Dato($1,'DECIMAL');}
     | CARACTER {$$=new Dato($1,'CHAR');}
     | CADENA {$$=new Dato($1,'STRING');}
     | BOOL {$$=new Dato($1,'BOOL');}

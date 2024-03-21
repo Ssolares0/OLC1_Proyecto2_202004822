@@ -16,7 +16,7 @@ class Dato extends instruccion {
             case "STRING":
                 var cadenaSincomillas = this.valor.slice(1, -1);
                 return cadenaSincomillas;
-            case "DOUBLE":
+            case "DECIMAL":
                 return Number(this.valor);
             case "BOOL":
                 return this.valor;

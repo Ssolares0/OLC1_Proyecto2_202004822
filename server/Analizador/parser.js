@@ -105,7 +105,7 @@ case 7:
 this.$=new Dato($$[$0],'ENTERO');
 break;
 case 8:
-this.$=new Dato($$[$0],'DOUBLE');
+this.$=new Dato($$[$0],'DECIMAL');
 break;
 case 9:
 this.$=new Dato($$[$0],'CHAR');

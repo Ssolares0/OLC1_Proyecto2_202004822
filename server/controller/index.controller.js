@@ -8,12 +8,12 @@ const index = (req, res) => {
 const analizar = (req, res) => {
     const {entrada} = req.body; // se obtiene informacion del body
     let result = analizador.parse(entrada); //mandamos a analizar la entrada
-    console.log(result);
+    //console.log(result);
 
     result.forEach(instruccion => {
         instruccion.interpretar(null);
     });
-    
+
     res.status(200).json({message: "Funcion analizar",salida:result}) //respuesta
 }
 
