@@ -3,15 +3,17 @@
 %options case-insensitive 
 
 // ---------> Expresiones Regulares
-decimal [0-9]+(\.)[0-9]+;
+decimal [0-9]+(\.)[0-9]+;   
 entero  [0-9]+;
 caracter  (\‘|\')(.{1,2})(\’|\');
 cadena  (\"|\“)(\\.|[^\"])*(\"|\”);
 bool  "true"|"false";
 variables  [a-zA-Z_]+\w*;
-comentarios "//".*;
+comentarios "//".* ;
 
 %%
+{comentarios}               {}
+[/][][^][]+([^/][^][]+)*[/] {}
 // -----> Reglas Lexicas
 
 "println"               { return 'RPRINTLN'; }
@@ -26,20 +28,21 @@ comentarios "//".*;
 "/"                     { return 'DIV'; }
 "%"                     { return 'MOD'; }
 "="                     { return 'IGUAL'; }
-{entero}                { return 'ENTERO'; } 
+
+
+// -----> Espacios en Blanco
+[ \s\r\n\t]             {/* Espacios se ignoran */}
+
 {decimal}               { return 'DECIMAL'; }
+{entero}                { return 'ENTERO'; } 
+
 {caracter}              { return 'CARACTER'; }
 {cadena}                { return 'CADENA'; }
 {bool}                  { return 'BOOL'; }
 {variables}             { return 'VARIABLES'; }
 
-{comentarios}               {}
-[/][][^][]+([^/][^][]+)*[/] {}
 
 
-
-// -----> Espacios en Blanco
-[ \s\r\n\t]             {/* Espacios se ignoran */}
 
 // -----> FIN DE CADENA Y ERRORES
 <<EOF>>               return 'EOF';
@@ -88,7 +91,7 @@ expresion
     : ENTERO {$$=new Dato($1,'ENTERO');}
     | DECIMAL {$$=new Dato($1,'DECIMAL');}
     | CARACTER {$$=new Dato($1,'CHAR');}
-    | CADENA {$$=new Dato($1,'STRING');}
+    | CADENA {$$=new Dato($1,'CADENA');}
     | BOOL {$$=new Dato($1,'BOOL');}
     | VARIABLES {$$=$1;}
     | expresion MAS expresion {$$=new Aritmetica($1,$3,$2);}

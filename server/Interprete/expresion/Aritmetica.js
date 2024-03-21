@@ -25,8 +25,9 @@ class Aritmetica extends instruccion {
                 return Number(this.valor);
             } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "DECIMAL" || this.val1.tipo == "DECIMAL" && this.val2.tipo == "ENTERO") {
                 this.tipo = "DECIMAL";
+
                 this.valor = parseFloat(valorizq) + parseFloat(valorder);
-                return Number(this.valor);
+                return (this.valor);
 
             } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "BOOL" || this.val1.tipo == "BOOL" && this.val2.tipo == "ENTERO") {
                 this.tipo = "ENTERO";
@@ -41,10 +42,10 @@ class Aritmetica extends instruccion {
                     this.valor = 1 + valorder;
 
                 } else if (valorizq == "false") {
-                    
+
                     this.valor = 0 + valorder;
                 }
-                
+
                 return Number(this.valor);
             } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "CHAR" || this.val1.tipo == "CHAR" && this.val2.tipo == "ENTERO") {
                 let asciiDer = 0;
@@ -65,25 +66,145 @@ class Aritmetica extends instruccion {
 
 
                 }
+                return this.valor;
+
+            } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "ENTERO") {
+                this.tipo = "CADENA";
+                if (this.val1.tipo == "CADENA") {
+
+                    this.valor = valorizq + valorder.toString();
+
+                } else if (this.val2.tipo == "CADENA") {
+                    this.valor = valorizq.toString() + valorder;
+                }
+
+                return this.valor;
+            } else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "DECIMAL") {
+                this.tipo = "DECIMAL";
+                console.log("Entro a DECIMAL");
+                this.valor = parseFloat(valorizq) + parseFloat(valorder);
+                return (this.valor);
+
+            } else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "BOOL" || this.val1.tipo == "BOOL" && this.val2.tipo == "DECIMAL") {
+                this.tipo = "DECIMAL";
+                if (valorder == "true") {
+                    this.valor = parseFloat(valorizq) + parseFloat(1);
+
+                } else if (valorder == "false") {
+                    valorder = 0;
+                    this.valor =parseFloat(valorizq) + parseFloat(0);
+
+                } else if (valorizq == "true") {
+                    this.valor = parseFloat(1) + parseFloat(valorder);
+
+                } else if (valorizq == "false") {
+
+                    this.valor = parseFloat(0) + parseFloat(valorder);
+                }
+
+                return (this.valor);
+            } else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "CHAR" || this.val1.tipo == "CHAR" && this.val2.tipo == "DECIMAL") {
+                let asciiDer = 0;
+                let asciiIzq = 0;
+                this.tipo = "DECIMAL";
+
+                if (this.val1.tipo == "CHAR") {
+                    for (const x in valorizq) {
+                        asciiIzq += Number(valorizq.charCodeAt(x));
+                        this.valor = asciiIzq + valorder.parseFloat();
+                    }
+
+                } else if (this.val2.tipo == "CHAR") {
+                    for (const x in valorder) {
+                        asciiDer += Number(valorder.charCodeAt(x));
+                        this.valor = valorizq.parseFloat() + asciiDer;
+                    }
 
 
+                }
                 return this.valor;
             }
-            else if (this.val1.tipo == "DOUBLE" && this.val2.tipo == "DOUBLE") {
-                this.tipo = "DOUBLE";
-                this.valor = valorizq + valorder;
-                return Number(this.valor);
+            else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "DECIMAL") {
+                this.tipo = "CADENA";
+                if (this.val1.tipo == "CADENA") {
 
-            } else if (this.val1.tipo == "STRING" && this.val2.tipo == "STRING") {
-                this.tipo = "STRING";
+                    this.valor = valorizq + valorder.toString();
+
+                } else if (this.val2.tipo == "CADENA") {
+                    this.valor = valorizq.toString() + valorder;
+                }
+
+                return this.valor;
+
+            }else if (this.val1.tipo == "BOOL" && this.val2.tipo == "BOOL") {
+                console.log("No se puede sumar dos booleanos");
+                this.tipo = "ERROR";
+                return this.valor;
+            } else if (this.val1.tipo == "BOOL" && this.val2.tipo == "CHAR" || this.val1.tipo == "CHAR" && this.val2.tipo == "BOOL") {
+                console.log("No se puede sumar un booleano con un char");
+                this.tipo = "ERROR";
+                return this.valor;
+            } else if (this.val1.tipo == "BOOL" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "BOOL") {
+                this.tipo = "CADENA";
+                if (this.val1.tipo == "CADENA") {
+
+                    if (valorder == "true") {
+                        valorder = 1;
+                        this.valor =  valorizq + valorder.toString();
+
+                    } else if (valorder == "false") {
+                        valorder = 0;
+                        this.valor = valorizq + valorder.toString();
+
+                    }
+                    
+
+                } else if (this.val2.tipo == "CADENA") {
+                    if (valorizq == "true") {
+                        valorizq = 1;
+                        this.valor = valorizq.toString() + valorder;
+
+                    } else if (valorizq == "false") {
+                        valorizq = 0;
+                        this.valor = valorizq.toString() + valorder;
+
+                    }
+                }
+            } else if (this.val1.tipo == "CHAR" && this.val2.tipo == "CHAR") {
+                this.tipo = "CADENA";
+                let asciiDer = 0 
+                let asciiIzq = 0 
+
+                for (const x in valorder) {                        
+                    asciiDer += Number(valorder.charCodeAt(x))
+                }
+                
+                for (const x in valorizq) {
+                    asciiIzq += Number(valorizq.charCodeAt(x))
+                }
+                this.valor =asciiIzq.toString() + asciiDer.toString();
+            } else if (this.val1.tipo == "CHAR" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "CHAR") {
+                asciiDer = 0;
+                asciiIzq = 0;
+            
+                this.tipo = "CADENA";
+                if (this.val1.tipo == "CADENA") {
+                    for (const x in valorder) {
+                        asciiDer += Number(valorder.charCodeAt(x));
+                    }
+                    this.valor = valorizq + asciiDer.toString();
+                } else if (this.val2.tipo == "CADENA") {
+                    for (const x in valorizq) {
+                        asciiIzq += Number(valorizq.charCodeAt(x));
+                    }
+                    this.valor = asciiIzq.toString() + valorder;
+                }
+            }
+            else if (this.val1.tipo == "CADENA" && this.val2.tipo == "CADENA") {
+                this.tipo = "CADENA";
                 this.valor = valorizq + valorder;
                 return this.valor;
-            } else if (this.val1.tipo == "STRING" && this.val2.tipo == "ENTERO") {
-                this.tipo = "STRING";
-                this.valor = valorizq + valorder.toString();;
-                return this.valor;
-            }
-            else {
+            } else {
                 //Errores semanticos
                 this.tipo == "ERROR";
                 console.log("Existe un Error semantico de tipo de dato");
@@ -95,7 +216,59 @@ class Aritmetica extends instruccion {
                 this.tipo = "ENTERO";
                 this.valor = valorizq * valorder;
                 return Number(this.valor);
+            } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "DECIMAL" || this.val1.tipo == "DECIMAL" && this.val2.tipo == "ENTERO") {
+                this.tipo = "DECIMAL";
+                this.valor = parseFloat(valorizq) * parseFloat(valorder);
+                return (this.valor);
+
+            } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "BOOL" || this.val1.tipo == "BOOL" && this.val2.tipo == "ENTERO") {
+                console.log("No se puede multiplicar un entero con un booleano");
+                this.tipo = "ERROR";
+                return this.valor;
+            } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "ENTERO") {
+                console.log("No se puede multiplicar una cadena con un entero");
+                this.tipo = "ERROR";
+                return this.valor;
             }
+            else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "DECIMAL") {
+                this.tipo = "DECIMAL";
+                this.valor = parseFloat(valorizq) * parseFloat(valorder);
+                return (this.valor);
+
+            } else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "BOOL" || this.val1.tipo == "BOOL" && this.val2.tipo == "DECIMAL") {
+                console.log("No se puede multiplicar un decimal con un booleano");
+                this.tipo = "ERROR";
+                return this.valor;
+            } else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "DECIMAL") {
+                console.log("No se puede multiplicar una cadena con un decimal");
+                this.tipo = "ERROR";
+                return this.valor;
+            }else if (this.val1.tipo == "BOOL" && this.val2.tipo == "BOOL") {
+                console.log("No se puede multiplicar dos booleanos");
+                this.tipo = "ERROR";
+                return this.valor;
+            } else if (this.val1.tipo == "BOOL" && this.val2.tipo == "CHAR" || this.val1.tipo == "CHAR" && this.val2.tipo == "BOOL") {
+                console.log("No se puede multiplicar un booleano con un char");
+                this.tipo = "ERROR";
+                return this.valor;
+            } else if (this.val1.tipo == "BOOL" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "BOOL") {
+                console.log("No se puede multiplicar un booleano con una cadena");
+                this.tipo = "ERROR";
+                return this.valor;
+            } else if (this.val1.tipo == "CHAR" && this.val2.tipo == "CHAR") {
+                console.log("No se puede multiplicar dos caracteres");
+                this.tipo = "ERROR";
+                return this.valor;
+            } else if (this.val1.tipo == "CHAR" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "CHAR") {
+                console.log("No se puede multiplicar un caracter con una cadena");
+                this.tipo = "ERROR";
+                return this.valor;
+            } else if (this.val1.tipo == "CADENA" && this.val2.tipo == "CADENA") {
+                console.log("No se puede multiplicar dos cadenas");
+                this.tipo = "ERROR";
+                return this.valor;
+            }
+
             else {
                 //Errores semanticos
                 this.tipo == "ERROR";

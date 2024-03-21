@@ -10,9 +10,13 @@ const analizar = (req, res) => {
     let result = analizador.parse(entrada); //mandamos a analizar la entrada
     //console.log(result);
 
-    result.forEach(instruccion => {
-        instruccion.interpretar(null);
-    });
+    try{
+        result.forEach(instruccion => {
+            instruccion.interpretar(null);
+        });
+    } catch (error) {
+        console.log("Hubo un Error al mandar la entrada a interpretar");
+    }
 
     res.status(200).json({message: "Funcion analizar",salida:result}) //respuesta
 }

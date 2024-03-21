@@ -13,11 +13,11 @@ class Dato extends instruccion {
         switch (this.tipo) {
             case "ENTERO":
                 return Number(this.valor);
-            case "STRING":
+            case "CADENA":
                 var cadenaSincomillas = this.valor.slice(1, -1);
                 return cadenaSincomillas;
             case "DECIMAL":
-                return Number(this.valor);
+                return (this.valor);
             case "BOOL":
                 return this.valor;
             case 'CHAR':
