@@ -1,5 +1,8 @@
+const e = require('express');
 const analizador =require('../Analizador/parser.js');
 const instruccion = require('../Interprete/instruccion.js');
+const {NodoAst} = require('../Interprete/simbol/NodoAst.js');
+const {graficarArbol} = require('../Interprete/simbol/GraficarTree.js');
 const index = (req, res) => {
     res.status(200).json({message: "Funcionando"})
 }
@@ -11,11 +14,18 @@ const analizar = (req, res) => {
     //console.log(result);
 
     try{
+        let init = new NodoAst("INICIO");
+        let instrucciones = new NodoAst("INSTRUCCIONES");
+        let respuesta ="";
         result.forEach(instruccion => {
             instruccion.interpretar(null);
+            instrucciones.agregarHijoAST(instruccion.getNodo());
         });
+        init.agregarHijoAST(instrucciones);
+        respuesta = graficarArbol(init);
+
     } catch (error) {
-        console.log("Hubo un Error al mandar la entrada a interpretar");
+        console.log("Hubo un Error al mandar la entrada a interpretar",error);
     }
 
     res.status(200).json({message: "Funcion analizar",salida:result}) //respuesta

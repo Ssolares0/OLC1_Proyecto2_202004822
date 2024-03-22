@@ -1,5 +1,6 @@
 const e = require('express');
 const instruccion = require('../instruccion.js');
+const {NodoAst} = require('../simbol/NodoAst.js');
 
 
 class Aritmetica extends instruccion {
@@ -11,6 +12,14 @@ class Aritmetica extends instruccion {
         this.tipo = 'ERROR';
         this.valor = 'null';
 
+    }
+
+    getNodo() {
+        let nodo = new NodoAst("EXPRESION");
+        nodo.agregarHijoAST(this.val1.getNodo());
+        nodo.agregarHijo(this.operador);
+        nodo.agregarHijoAST(this.val2.getNodo());
+        return nodo;
     }
 
     interpretar(entorno) {

@@ -72,12 +72,12 @@
   }
 */
 var parser = (function(){
-var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[2,5,8],$V3=[1,11],$V4=[1,12],$V5=[1,13],$V6=[1,14],$V7=[1,15],$V8=[1,16],$V9=[1,19],$Va=[11,19,20];
+var o=function(k,v,o,l){for(o=o||{},l=k.length;l--;o[k[l]]=v);return o},$V0=[1,5],$V1=[1,6],$V2=[2,5,8],$V3=[1,12],$V4=[1,13],$V5=[1,14],$V6=[1,15],$V7=[1,16],$V8=[1,17],$V9=[1,20],$Va=[11,13,14];
 var parser = {trace: function trace () { },
 yy: {},
-symbols_: {"error":2,"inicio":3,"listainstruccion":4,"EOF":5,"instruccion":6,"print":7,"RPRINTLN":8,"PARIZQ":9,"expresion":10,"PARDER":11,"PUNTOCOMA":12,"ENTERO":13,"DECIMAL":14,"CARACTER":15,"CADENA":16,"BOOL":17,"VARIABLES":18,"MAS":19,"POR":20,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",8:"RPRINTLN",9:"PARIZQ",11:"PARDER",12:"PUNTOCOMA",13:"ENTERO",14:"DECIMAL",15:"CARACTER",16:"CADENA",17:"BOOL",18:"VARIABLES",19:"MAS",20:"POR"},
-productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[7,5],[10,1],[10,1],[10,1],[10,1],[10,1],[10,1],[10,3],[10,3]],
+symbols_: {"error":2,"inicio":3,"listainstruccion":4,"EOF":5,"instruccion":6,"print":7,"RPRINTLN":8,"PARIZQ":9,"expresion":10,"PARDER":11,"PUNTOCOMA":12,"MAS":13,"POR":14,"datos":15,"ENTERO":16,"DECIMAL":17,"CARACTER":18,"CADENA":19,"BOOL":20,"VARIABLES":21,"$accept":0,"$end":1},
+terminals_: {2:"error",5:"EOF",8:"RPRINTLN",9:"PARIZQ",11:"PARDER",12:"PUNTOCOMA",13:"MAS",14:"POR",16:"ENTERO",17:"DECIMAL",18:"CARACTER",19:"CADENA",20:"BOOL",21:"VARIABLES"},
+productions_: [0,[3,2],[4,2],[4,1],[6,1],[6,1],[7,5],[10,3],[10,3],[10,1],[15,1],[15,1],[15,1],[15,1],[15,1],[15,1]],
 performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
@@ -92,7 +92,7 @@ break;
 case 3:
 this.$=[]; this.$.push($$[$0]);
 break;
-case 4: case 12:
+case 4: case 9: case 15:
 this.$=$$[$0];
 break;
 case 5:
@@ -101,27 +101,27 @@ break;
 case 6:
 this.$=new Print($$[$0-2]);
 break;
-case 7:
-this.$=new Dato($$[$0],'ENTERO');
-break;
-case 8:
-this.$=new Dato($$[$0],'DECIMAL');
-break;
-case 9:
-this.$=new Dato($$[$0],'CHAR');
+case 7: case 8:
+this.$=new Aritmetica($$[$0-2],$$[$0],$$[$0-1]);
 break;
 case 10:
-this.$=new Dato($$[$0],'CADENA');
+this.$=new Dato($$[$0],'ENTERO');
 break;
 case 11:
-this.$=new Dato($$[$0],'BOOL');
+this.$=new Dato($$[$0],'DECIMAL');
 break;
-case 13: case 14:
-this.$=new Aritmetica($$[$0-2],$$[$0],$$[$0-1]);
+case 12:
+this.$=new Dato($$[$0],'CHAR');
+break;
+case 13:
+this.$=new Dato($$[$0],'CADENA');
+break;
+case 14:
+this.$=new Dato($$[$0],'BOOL');
 break;
 }
 },
-table: [{2:$V0,3:1,4:2,6:3,7:4,8:$V1},{1:[3]},{2:$V0,5:[1,7],6:8,7:4,8:$V1},o($V2,[2,3]),o($V2,[2,4]),o($V2,[2,5]),{9:[1,9]},{1:[2,1]},o($V2,[2,2]),{10:10,13:$V3,14:$V4,15:$V5,16:$V6,17:$V7,18:$V8},{11:[1,17],19:[1,18],20:$V9},o($Va,[2,7]),o($Va,[2,8]),o($Va,[2,9]),o($Va,[2,10]),o($Va,[2,11]),o($Va,[2,12]),{12:[1,20]},{10:21,13:$V3,14:$V4,15:$V5,16:$V6,17:$V7,18:$V8},{10:22,13:$V3,14:$V4,15:$V5,16:$V6,17:$V7,18:$V8},o($V2,[2,6]),o([11,19],[2,13],{20:$V9}),o($Va,[2,14])],
+table: [{2:$V0,3:1,4:2,6:3,7:4,8:$V1},{1:[3]},{2:$V0,5:[1,7],6:8,7:4,8:$V1},o($V2,[2,3]),o($V2,[2,4]),o($V2,[2,5]),{9:[1,9]},{1:[2,1]},o($V2,[2,2]),{10:10,15:11,16:$V3,17:$V4,18:$V5,19:$V6,20:$V7,21:$V8},{11:[1,18],13:[1,19],14:$V9},o($Va,[2,9]),o($Va,[2,10]),o($Va,[2,11]),o($Va,[2,12]),o($Va,[2,13]),o($Va,[2,14]),o($Va,[2,15]),{12:[1,21]},{10:22,15:11,16:$V3,17:$V4,18:$V5,19:$V6,20:$V7,21:$V8},{10:23,15:11,16:$V3,17:$V4,18:$V5,19:$V6,20:$V7,21:$V8},o($V2,[2,6]),o([11,13],[2,7],{14:$V9}),o($Va,[2,8])],
 defaultActions: {7:[2,1]},
 parseError: function parseError (str, hash) {
     if (hash.recoverable) {
@@ -718,11 +718,11 @@ case 6: return 'LLADER';
 break;
 case 7: return 12; 
 break;
-case 8: return 19; 
+case 8: return 13; 
 break;
 case 9: return 'MENOS'; 
 break;
-case 10: return 20; 
+case 10: return 14; 
 break;
 case 11: return 'DIV'; 
 break;
@@ -732,17 +732,17 @@ case 13: return 'IGUAL';
 break;
 case 14:/* Espacios se ignoran */
 break;
-case 15: return 14; 
+case 15: return 17; 
 break;
-case 16: return 13; 
+case 16: return 16; 
 break;
-case 17: return 15; 
+case 17: return 18; 
 break;
-case 18: return 16; 
+case 18: return 19; 
 break;
-case 19: return 17; 
+case 19: return 20; 
 break;
-case 20: return 18; 
+case 20: return 21; 
 break;
 case 21:return 5;
 break;

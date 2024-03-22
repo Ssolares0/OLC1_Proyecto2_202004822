@@ -1,4 +1,5 @@
 const instruccion = require('../instruccion.js');
+const {NodoAst} = require('../simbol/NodoAst.js');
 
 
 class Dato extends instruccion {
@@ -9,6 +10,11 @@ class Dato extends instruccion {
 
     }
 
+    getNodo() {
+        let nodo = new NodoAst("Dato");
+        nodo.agregarHijo(this.valor);
+        return nodo;
+    }
     interpretar(entorno) {
         switch (this.tipo) {
             case "ENTERO":

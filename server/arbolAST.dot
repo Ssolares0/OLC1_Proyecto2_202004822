@@ -1,0 +1,36 @@
+digraph arbolAST{ 
+      n0[label="INICIO"];
+      n1[label="INSTRUCCIONES"];
+      n0 -> n1;
+n2[label="PRINT"];
+      n1 -> n2;
+n3[label="print"];
+      n2 -> n3;
+n4[label="("];
+      n2 -> n4;
+n5[label="EXPRESION"];
+      n2 -> n5;
+n6[label="EXPRESION"];
+      n5 -> n6;
+n7[label="Dato"];
+      n6 -> n7;
+n8[label="2"];
+      n7 -> n8;
+n9[label="*"];
+      n6 -> n9;
+n10[label="Dato"];
+      n6 -> n10;
+n11[label="2"];
+      n10 -> n11;
+n12[label="+"];
+      n5 -> n12;
+n13[label="Dato"];
+      n5 -> n13;
+n14[label="66"];
+      n13 -> n14;
+n15[label=")"];
+      n2 -> n15;
+n16[label=";"];
+      n2 -> n16;
+
+    }

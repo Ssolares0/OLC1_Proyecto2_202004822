@@ -1,5 +1,5 @@
 const instruccion = require('../instruccion.js');
-
+const {NodoAst} = require('../simbol/NodoAst.js');
 
 class Print extends instruccion{
     constructor(expresion){
@@ -15,6 +15,15 @@ class Print extends instruccion{
         }
         console.log(value);
     }   
+    getNodo(){
+        let nodo = new NodoAst("PRINT");
+        nodo.agregarHijo("println");
+        nodo.agregarHijo("(");
+        nodo.agregarHijoAST(this.expresion.getNodo());
+        nodo.agregarHijo(")");
+        nodo.agregarHijo(";");
+        return nodo;
+    }
 }
 
 module.exports = Print;

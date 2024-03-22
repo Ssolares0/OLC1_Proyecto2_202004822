@@ -88,12 +88,15 @@ print
 ;
 
 expresion 
-    : ENTERO {$$=new Dato($1,'ENTERO');}
-    | DECIMAL {$$=new Dato($1,'DECIMAL');}
-    | CARACTER {$$=new Dato($1,'CHAR');}
-    | CADENA {$$=new Dato($1,'CADENA');}
-    | BOOL {$$=new Dato($1,'BOOL');}
-    | VARIABLES {$$=$1;}
-    | expresion MAS expresion {$$=new Aritmetica($1,$3,$2);}
+    : expresion MAS expresion {$$=new Aritmetica($1,$3,$2);}
     | expresion POR expresion {$$=new Aritmetica($1,$3,$2);}
+    | datos {$$=$1;}
+;
+
+datos : ENTERO {$$=new Dato($1,'ENTERO');}
+        | DECIMAL {$$=new Dato($1,'DECIMAL');}
+        | CARACTER {$$=new Dato($1,'CHAR');}
+        | CADENA {$$=new Dato($1,'CADENA');}
+        | BOOL {$$=new Dato($1,'BOOL');}
+        | VARIABLES {$$=$1;}
 ;
