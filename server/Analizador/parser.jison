@@ -27,7 +27,22 @@ comentarios "//".* ;
 "*"                     { return 'POR'; }
 "/"                     { return 'DIV'; }
 "%"                     { return 'MOD'; }
+//Operadores Relacionales
+"<="                    { return 'MENORIGUAL'; }
+"<"                     { return 'MENOR'; }
+">="                    { return 'MAYORIGUAL'; }
+">"                     { return 'MAYOR'; }
+"!="                    { return 'DIFERENTE'; }
+"=="                    { return 'REL_IGUAL'; }
 "="                     { return 'IGUAL'; }
+
+//Operadores Logicos
+"||"                   { return 'OR'; }
+"&&"                   { return 'AND'; }
+"!"                     { return 'NOT'; }
+
+
+
 
 
 // -----> Espacios en Blanco
@@ -57,10 +72,17 @@ comentarios "//".* ;
     const Dato = require('../Interprete/expresion/Dato.js');
     const Print = require('../Interprete/instruccion/print.js');
     const Aritmetica =require('../Interprete/expresion/Aritmetica.js');
+    const Logicos =require('../Interprete/expresion/Logicos.js');
+    const Relacionales =require('../Interprete/expresion/Relacionales.js');
 %}
 
-%left 'MAS' 
+%left 'OR' 
+%left 'AND' 
+%left 'REL_IGUAL' 'DIFERENTE' 'MENOR' 'MENORIGUAL' 'MAYOR'  'MAYORIGUAL'
+%left 'MAS' 'MENOS'
 %left 'POR'
+
+%right 'NOT'
 
 // -------> Simbolo Inicial
 %start inicio
@@ -89,7 +111,17 @@ print
 
 expresion 
     : expresion MAS expresion {$$=new Aritmetica($1,$3,$2);}
+    | expresion MENOS expresion {$$=new Aritmetica($1,$3,$2);}
     | expresion POR expresion {$$=new Aritmetica($1,$3,$2);}
+    | expresion REL_IGUAL expresion {$$=new Relacionales($1,$3,$2);}
+    | expresion MENOR expresion {$$=new Relacionales($1,$3,$2);}
+    | expresion MAYOR expresion {$$=new Relacionales($1,$3,$2);}
+    | expresion MENORIGUAL expresion {$$=new Relacionales($1,$3,$2);}
+    | expresion MAYORIGUAL expresion {$$=new Relacionales($1,$3,$2);}
+    | expresion DIFERENTE expresion {$$=new Relacionales($1,$3,$2);}
+    | expresion AND expresion {$$=new Logicos($1,$3,$2);}
+    | expresion OR expresion {$$=new Logicos($1,$3,$2);}
+    | NOT expresion {$$=new Logicos($2,$2,$1);}
     | datos {$$=$1;}
 ;
 

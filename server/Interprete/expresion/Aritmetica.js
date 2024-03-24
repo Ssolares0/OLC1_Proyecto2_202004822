@@ -23,6 +23,7 @@ class Aritmetica extends instruccion {
     }
 
     interpretar(entorno) {
+        
 
         let valorizq = this.val1.interpretar(null);
         let valorder = this.val2.interpretar(null);
@@ -283,6 +284,67 @@ class Aritmetica extends instruccion {
                 this.tipo == "ERROR";
                 console.log("Existe un Error semantico de tipo de dato");
                 return this.valor;
+            }
+        } else if (this.operador== '-') {
+            if (this.val1.tipo == "ENTERO" && this.val2.tipo == "ENTERO") {
+                this.tipo = "ENTERO";
+                this.valor = valorizq - valorder;
+                return Number(this.valor);
+            } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "DECIMAL" || this.val1.tipo == "DECIMAL" && this.val2.tipo == "ENTERO") {
+                this.tipo = "DECIMAL";
+                this.valor = parseFloat(valorizq) - parseFloat(valorder);
+                return (this.valor);
+
+            } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "BOOL" || this.val1.tipo == "BOOL" && this.val2.tipo == "ENTERO") {
+                this.tipo = "ENTERO";
+                if (valorder == "true") {
+                    this.valor = valorizq - 1;
+
+                } else if (valorder == "false") {
+                    valorder = 0;
+                    this.valor = valorizq - 0;
+
+                } else if (valorizq == "true") {
+                    this.valor = 1 - valorder;
+
+                } else if (valorizq == "false") {
+
+                    this.valor = 0 - valorder;
+                }
+                return this.valor;
+            } else if (this.val1.tipo == "ENTERO" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "ENTERO") {
+                console.log("No se puede restar una cadena con un entero");
+                this.tipo = "ERROR";
+                return this.valor;
+            }
+            else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "DECIMAL") {
+                this.tipo = "DECIMAL";
+                this.valor = parseFloat(valorizq) - parseFloat(valorder);
+                return (this.valor);
+
+            } else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "BOOL" || this.val1.tipo == "BOOL" && this.val2.tipo == "DECIMAL") {
+                this.tipo = "DECIMAL";
+                if (valorder == "true") {
+                    this.valor = parseFloat(valorizq) - parseFloat(1);
+
+                } else if (valorder == "false") {
+                    valorder = 0;
+                    this.valor =parseFloat(valorizq) - parseFloat(0);
+
+                } else if (valorizq == "true") {
+                    this.valor = parseFloat(1) - parseFloat(valorder);
+
+                } else if (valorizq == "false") {
+
+                    this.valor = parseFloat(0) - parseFloat(valorder);
+                }
+                return this.valor;
+            } else if (this.val1.tipo == "DECIMAL" && this.val2.tipo == "CADENA" || this.val1.tipo == "CADENA" && this.val2.tipo == "DECIMAL") {
+                console.log("No se puede restar una cadena con un decimal");
+                this.tipo = "ERROR";
+                return this.valor;
+            }else if (this.val1.tipo == "BOOL" && this.val2.tipo == "BOOL") {
+                console.log("No se puede restar dos booleanos");
             }
         }
     }
