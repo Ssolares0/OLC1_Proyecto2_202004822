@@ -1,10 +1,8 @@
-
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './css/Style.css';
-import { Home } from './Components/Home';
+import logo from './logo.svg';
+import './App.css';
 
 function App() {
-  /*return (
+  return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -21,16 +19,7 @@ function App() {
         </a>
       </header>
     </div>
-  );*/
-  return (
-    <Router>
-      <Routes>
-      <Route path="/"  />
-        <Route path="/Home" element={<Home/>}></Route>
-      </Routes>
-    </Router>
-
-  )
+  );
 }
 
 export default App;
