@@ -18,6 +18,7 @@ const analizar = (req, res) => {
         let instrucciones = new NodoAst("INSTRUCCIONES");
         let respuesta ="";
         result.forEach(instruccion => {
+            
             instruccion.interpretar(null);
             instrucciones.agregarHijoAST(instruccion.getNodo());
         });
@@ -25,7 +26,7 @@ const analizar = (req, res) => {
         respuesta = graficarArbol(init);
 
     } catch (error) {
-        console.log("Hubo un Error al mandar la entrada a interpretar",error);
+        console.log("Hubo un Error al mandar la entrada a interpretar");
     }
 
     res.status(200).json({message: "Funcion analizar",salida:result}) //respuesta

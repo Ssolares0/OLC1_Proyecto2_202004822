@@ -14,6 +14,7 @@ class Print extends instruccion{
             return;
         }
         console.log(value);
+        
     }   
     getNodo(){
         let nodo = new NodoAst("PRINT");
