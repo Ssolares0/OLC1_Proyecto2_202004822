@@ -1,5 +1,5 @@
 const instruccion = require('../instruccion.js');
-const {NodoAst} = require('../simbol/NodoAst.js');
+const {NodoAst} = require('../graficar/NodoAst.js');
 
 
 class Dato extends instruccion {

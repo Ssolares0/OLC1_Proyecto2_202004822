@@ -71,6 +71,10 @@ export const Home = () => {
         document.body.removeChild(a);
     };
 
+    const openArbolAst = () => {
+        window.open("server/arbolAST.svg", "_blank");
+    };
+
 
 
     const handleSubmit = async (e) => {
@@ -91,7 +95,7 @@ export const Home = () => {
                 // Aquí puedes trabajar con la respuesta JSON recibida
                 //lo mostramos en el text area 2
 
-
+                
                 document.querySelector('.text-area2').value = result.salida;
             })
             .catch(error => {
@@ -129,8 +133,13 @@ export const Home = () => {
                             <button id="compilarBtn" onClick={handleSubmit} class="btn btn-light" type="button">Ejecutar entrada</button>
 
                         </li>
-                        <a class="nav-item nav-link" href="#">Reporte Errores</a>
-                        <a class="nav-item nav-link" href="#">Generar Arbol AST</a>
+                        <a class="nav-item nav-link" >Reporte Errores</a>
+
+                        <li class="nav-item">
+                            <button id="openArbol" onClick={openArbolAst} class="btn btn-light" type="button">Reporte Arbol</button>
+
+                        </li>
+                       
                         <a class="nav-item nav-link disabled" href="#">Reporte Simbolos</a>
                     </div>
                 </div>

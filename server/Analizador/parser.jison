@@ -10,13 +10,21 @@ cadena  (\"|\“)(\\.|[^\"])*(\"|\”);
 bool  "true"|"false";
 variables  [a-zA-Z_]+\w*;
 comentarios "//".* ;
+ 
 
 %%
 {comentarios}               {}
-[/][][^][]+([^/][^][]+)*[/] {}
+[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/] {}
+
 // -----> Reglas Lexicas
 
+//Palabras Reservadas
 "println"               { return 'RPRINTLN'; }
+"cout"                  { return 'RCOUT'; }
+"endl"                  { return 'RENDL'; }
+
+
+"<<"                    { return 'MENOR_MENOR'; }
 "("                     { return 'PARIZQ'; }
 ")"                     { return 'PARDER'; }
 "{"                     { return 'LLAIZQ'; }
@@ -105,7 +113,10 @@ instruccion
 ;
 
 print
-    : RPRINTLN PARIZQ expresion PARDER PUNTOCOMA {$$=new Print($3);}
+    : RCOUT MENOR_MENOR expresion PUNTOCOMA {$$=new Print($3);}
+    | RCOUT MENOR_MENOR expresion MENOR_MENOR RENDL PUNTOCOMA {$$=new Print($3);}
+    | RPRINTLN PARIZQ expresion PARDER PUNTOCOMA {$$=new Print($3);}
+
     
 ;
 
