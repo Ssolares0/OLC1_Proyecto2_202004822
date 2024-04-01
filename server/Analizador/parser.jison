@@ -19,6 +19,13 @@ comentarios "//".* ;
 // -----> Reglas Lexicas
 
 //Palabras Reservadas
+"int"                   { return 'INT'; }
+"string"                { return 'STRING'; }
+"char"                  { return 'CHAR'; }
+"bool"                  { return 'BOOL'; }
+"double"                { return 'DOUBLE'; }
+"std"                   { return 'STD'; }
+
 "println"               { return 'RPRINTLN'; }
 "cout"                  { return 'RCOUT'; }
 "endl"                  { return 'RENDL'; }
@@ -30,11 +37,13 @@ comentarios "//".* ;
 "{"                     { return 'LLAIZQ'; }
 "}"                     { return 'LLADER'; }
 ";"                     { return 'PUNTOCOMA'; }
+","                     { return 'COMA'; }
 "+"                     { return 'MAS'; }
 "-"                     { return 'MENOS'; }
-"*"                     { return 'POR'; }
 "/"                     { return 'DIV'; }
-"%"                     { return 'MOD'; }
+"*"                     { return 'POR'; }
+"^"                     {return "POTENCIA";}
+"%"                     {return "MODULO";}
 //Operadores Relacionales
 "<="                    { return 'MENORIGUAL'; }
 "<"                     { return 'MENOR'; }
@@ -43,6 +52,10 @@ comentarios "//".* ;
 "!="                    { return 'DIFERENTE'; }
 "=="                    { return 'REL_IGUAL'; }
 "="                     { return 'IGUAL'; }
+
+//ternarios
+"?"                     { return 'TERNARIO'; }
+":"                     { return 'DOSPUNTOS'; }
 
 //Operadores Logicos
 "||"                   { return 'OR'; }
@@ -82,13 +95,16 @@ comentarios "//".* ;
     const Aritmetica =require('../Interprete/expresion/Aritmetica.js');
     const Logicos =require('../Interprete/expresion/Logicos.js');
     const Relacionales =require('../Interprete/expresion/Relacionales.js');
+    const Declaracion =require('../Interprete/instruccion/declaracion.js');
 %}
 
 %left 'OR' 
 %left 'AND' 
 %left 'REL_IGUAL' 'DIFERENTE' 'MENOR' 'MENORIGUAL' 'MAYOR'  'MAYORIGUAL'
 %left 'MAS' 'MENOS'
-%left 'POR'
+%left 'DIV' 'POR'
+%left 'POTENCIA' 'MODULO'
+
 
 %right 'NOT'
 
@@ -109,6 +125,7 @@ listainstruccion
 
 instruccion
 	: print  {$$=$1;}
+    | declaracion {$$=$1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
 
@@ -119,9 +136,14 @@ print
 
     
 ;
+declaracion
+    : tipos listaval IGUAL expresion PUNTOCOMA {$$=new Declaracion($1,$2,$4);}
+    | tipos listaval PUNTOCOMA {$$=new Declaracion($1,$2,null);}
+;
 
 expresion 
-    : expresion MAS expresion {$$=new Aritmetica($1,$3,$2);}
+    : MENOS expresion %prec 'UMENOS' {$$=new Aritmetica($2,$2,'NEGACION');}
+    | expresion MAS expresion {$$=new Aritmetica($1,$3,$2);}
     | expresion MENOS expresion {$$=new Aritmetica($1,$3,$2);}
     | expresion POR expresion {$$=new Aritmetica($1,$3,$2);}
     | expresion REL_IGUAL expresion {$$=new Relacionales($1,$3,$2);}
@@ -134,6 +156,18 @@ expresion
     | expresion OR expresion {$$=new Logicos($1,$3,$2);}
     | NOT expresion {$$=new Logicos($2,$2,$1);}
     | datos {$$=$1;}
+;
+
+tipos
+    : INT  {$$=$1;}
+    | STD DOSPUNTOS DOSPUNTOS STRING {$$=$1;}
+    | CHAR{$$=$1;}
+    | BOOL  {$$=$1;}
+    | DOUBLE    {$$=$1;}
+;
+listaval
+    : listaval 'COMA' VARIABLES
+    | VARIABLES
 ;
 
 datos : ENTERO {$$=new Dato($1,'ENTERO');}
