@@ -1,14 +1,20 @@
 
 
 class Symbol {
-    constructor(value,id, typevar, typedata,scope, line, column) {
-        this.value = value;
-        this.id = id;
-        this.typevar = typevar;
+    constructor(nombre,valor, tipo, typedata, line, column) {
+        this.nombre = nombre;
+        this.valor = valor;
+        this.tipo = tipo;
         this.typedata = typedata;
-        this.scope = scope;
         this.line = line;
         this.column = column;
+        
     }
 }   
-module.exports = Symbol;
+
+const TipoSimbolo ={
+    VARIABLE: 'VARIABLE',
+    ARREGLO : 'ARREGLO',
+    FUNCION : 'FUNCION',
+}
+module.exports = {Symbol,TipoSimbolo};

@@ -90,12 +90,14 @@ comentarios "//".* ;
 // -------> Precedencia
 
 %{
+    const {TipoDato}= require('../Interprete/expresion.js');
     const Dato = require('../Interprete/expresion/Dato.js');
     const Print = require('../Interprete/instruccion/print.js');
     const Aritmetica =require('../Interprete/expresion/Aritmetica.js');
     const Logicos =require('../Interprete/expresion/Logicos.js');
     const Relacionales =require('../Interprete/expresion/Relacionales.js');
     const Declaracion =require('../Interprete/instruccion/declaracion.js');
+
 %}
 
 %left 'OR' 
@@ -130,9 +132,9 @@ instruccion
 ;
 
 print
-    : RCOUT MENOR_MENOR expresion PUNTOCOMA {$$=new Print($3);}
-    | RCOUT MENOR_MENOR expresion MENOR_MENOR RENDL PUNTOCOMA {$$=new Print($3);}
-    | RPRINTLN PARIZQ expresion PARDER PUNTOCOMA {$$=new Print($3);}
+    : RCOUT MENOR_MENOR expresion PUNTOCOMA {$$=new Print($3,@1.first_line,@1.first_column);}
+    | RCOUT MENOR_MENOR expresion MENOR_MENOR RENDL PUNTOCOMA {$$=new Print($3,@1.first_line,@1.first_column);}
+    | RPRINTLN PARIZQ expresion PARDER PUNTOCOMA {$$=new Print($3,@1.first_line,@1.first_column);}
 
     
 ;
@@ -143,20 +145,22 @@ declaracion
 
 expresion 
     : MENOS expresion %prec 'UMENOS' {$$=new Aritmetica($2,$2,'NEGACION');}
-    | expresion MAS expresion {$$=new Aritmetica($1,$3,$2);}
-    | expresion MENOS expresion {$$=new Aritmetica($1,$3,$2);}
-    | expresion POR expresion {$$=new Aritmetica($1,$3,$2);}
-    | expresion REL_IGUAL expresion {$$=new Relacionales($1,$3,$2);}
-    | expresion MENOR expresion {$$=new Relacionales($1,$3,$2);}
-    | expresion MAYOR expresion {$$=new Relacionales($1,$3,$2);}
-    | expresion MENORIGUAL expresion {$$=new Relacionales($1,$3,$2);}
-    | expresion MAYORIGUAL expresion {$$=new Relacionales($1,$3,$2);}
-    | expresion DIFERENTE expresion {$$=new Relacionales($1,$3,$2);}
-    | expresion AND expresion {$$=new Logicos($1,$3,$2);}
-    | expresion OR expresion {$$=new Logicos($1,$3,$2);}
-    | NOT expresion {$$=new Logicos($2,$2,$1);}
+    | expresion MAS expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion MENOS expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion POR expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion REL_IGUAL expresion {$$=new Relacionales($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion MENOR expresion {$$=new Relacionales($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion MAYOR expresion {$$=new Relacionales($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion MENORIGUAL expresion {$$=new Relacionales($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion MAYORIGUAL expresion {$$=new Relacionales($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion DIFERENTE expresion {$$=new Relacionales($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion AND expresion {$$=new Logicos($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion OR expresion {$$=new Logicos($1,$3,$2,@1.first_line,@1.first_column);}
+    | NOT expresion {$$=new Logicos($2,$2,$1,@1.first_line,@1.first_column);}
     | datos {$$=$1;}
-;
+
+    ;
+
 
 tipos
     : INT  {$$=$1;}
@@ -165,15 +169,16 @@ tipos
     | BOOL  {$$=$1;}
     | DOUBLE    {$$=$1;}
 ;
+
 listaval
     : listaval 'COMA' VARIABLES
     | VARIABLES
 ;
 
-datos : ENTERO {$$=new Dato($1,'ENTERO');}
-        | DECIMAL {$$=new Dato($1,'DECIMAL');}
-        | CARACTER {$$=new Dato($1,'CHAR');}
-        | CADENA {$$=new Dato($1,'CADENA');}
-        | BOOL {$$=new Dato($1,'BOOL');}
+datos : ENTERO {$$=new Dato($1,TipoDato.ENTERO,@1.first_line,@1.first_column);}
+        | DECIMAL {$$=new Dato($1,TipoDato.DECIMAL,@1.first_line,@1.first_column);}
+        | CARACTER {$$=new Dato($1,TipoDato.CHAR,@1.first_line,@1.first_column);}
+        | CADENA {$$=new Dato($1,TipoDato.CADENA,@1.first_line,@1.first_column);}
+        | BOOL {$$=new Dato($1,TipoDato.BOOL,@1.first_line,@1.first_column);}
         | VARIABLES {$$=$1;}
 ;

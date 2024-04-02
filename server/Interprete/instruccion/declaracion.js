@@ -1,16 +1,15 @@
-const instruccion = require('../instruccion.js');
+const {instruccion,TipoInstruccion}= require('../instruccion.js');
 const { NodoAst } = require('../graficar/NodoAst.js');
 const Entorno = require('../symbols/entorno.js');
 
 
 class Declaracion extends instruccion {
     constructor(tipo, nombre, expresion, line, column) {
-        super(line, column);
+        super(TipoInstruccion.DECLARACION,line, column);
         this.expresion = expresion;
         this.tipo = tipo;
         this.nombre = nombre;
-        this.line = line;
-        this.column = column;
+        
         
 
     }
@@ -35,13 +34,13 @@ class Declaracion extends instruccion {
             }
             console.log("entro a declaracion sin expresion");
             console.log("tipo: " + tipo + " nombre: " + nombre + " valor: " + this.valor);
-            /*
-            let c = Entorno.save_variable(nombre,valor,tipo,this.line,this.column);
+            
+            let c = Entorno.save_variable(nombre,this.valor, tipo, "variable", this.line, this.column);
             if(c == false){
                 console.log("Error semantico: la variable "+nombre+" ya existe");
                 return;
             }
-            */
+            
         } else if (this.expresion != null) {
             let value = this.expresion.interpretar(entorno);
 

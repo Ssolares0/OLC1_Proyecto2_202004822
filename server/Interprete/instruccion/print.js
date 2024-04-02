@@ -1,17 +1,18 @@
-const instruccion = require('../instruccion.js');
+const {instruccion,TipoInstruccion}= require('../instruccion.js');
 const {NodoAst} = require('../graficar/NodoAst.js');
+const {TipoDato } = require('../Expresion.js');
 
 class Print extends instruccion{
-    constructor(expresion){
-        super();
+    constructor(expresion,fila,columna){
+        super(TipoInstruccion.PRINT,fila,columna);
         this.expresion = expresion;
     }
 
     interpretar(entorno){
-        let value =this.expresion.interpretar(null);
-        if(this.expresion.tipo == "ERROR"){
+        let value =this.expresion.interpretar(entorno);
+        if(this.expresion.tipo == TipoDato.ERROR){
             console.log("Error semantico: no se pueden imprimir errores");
-            return;
+            return this;
         }
         console.log(value);
         return value;

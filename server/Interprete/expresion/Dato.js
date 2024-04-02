@@ -1,10 +1,11 @@
 const instruccion = require('../instruccion.js');
 const {NodoAst} = require('../graficar/NodoAst.js');
+const {Expresion,TipoDato} = require('../Expresion.js');
 
 
-class Dato extends instruccion {
-    constructor(valor, tipo) {
-        super();
+class Dato extends Expresion {
+    constructor(valor, tipo,fila,columna) {
+        super(valor,tipo,fila,columna);
         this.valor = valor;
         this.tipo = tipo;
 

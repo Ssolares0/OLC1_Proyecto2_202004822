@@ -1,60 +1,57 @@
 const e = require('express');
 const instruccion = require('../instruccion.js');
 const { NodoAst } = require('../graficar/NodoAst.js');
+const {Expresion,TipoDato} = require('../Expresion.js');
 
-
-class Relacionales extends instruccion {
+class Relacionales extends Expresion {
     constructor(op1, op2, operador, linea, columna) {
-        super();
+        super("ERROR",TipoDato.ERROR,linea, columna);
         this.op1 = op1;
         this.op2 = op2;
         this.operador = operador;
-        this.tipo = 'ERROR';
-        this.valor = 'null';
-        this.linea = linea;
-        this.columna = columna;
+        
     }
 
     interpretar(entorno) {
-        const op1 = this.op1.interpretar(entorno);
-        const op2 = this.op2.interpretar(entorno);
+        this.op1.interpretar(entorno);
+        this.op2.interpretar(entorno);
 
-        if (this.op1.tipo == "ENTERO" && this.op2.tipo == "ENTERO"
-            || this.op1.tipo == "ENTERO" && this.op2.tipo == "DECIMAL"
-            || this.op1.tipo == "DECIMAL" && this.op2.tipo == "ENTERO"
-            || this.op1.tipo == "DECIMAL" && this.op2.tipo == "DECIMAL"
-            || this.op1.tipo == "ENTERO" && this.op2.tipo == "CHAR"
-            || this.op1.tipo == "CHAR" && this.op2.tipo == "ENTERO"
-            || this.op1.tipo == "ENTERO" && this.op2.tipo == "CHAR"
-            || this.op1.tipo == "CHAR" && this.op2.tipo == "CHAR"
-            || this.op1.tipo == "BOOL" && this.op2.tipo == "BOOL"
-            || this.op1.tipo == "CADENA" && this.op2.tipo == "CADENA"
-            || this.op1.tipo == "DECIMAL" && this.op2.tipo == "CHAR"
-            || this.op1.tipo == "CHAR" && this.op2.tipo == "DECIMAL") {
+        if (this.op1.tipo == TipoDato.ENTERO && this.op2.tipo == TipoDato.ENTERO
+            || this.op1.tipo == TipoDato.ENTERO && this.op2.tipo == TipoDato.DECIMAL
+            || this.op1.tipo == TipoDato.DECIMAL && this.op2.tipo == TipoDato.ENTERO
+            || this.op1.tipo == TipoDato.DECIMAL && this.op2.tipo == TipoDato.DECIMAL
+            || this.op1.tipo == TipoDato.ENTERO && this.op2.tipo == TipoDato.CHAR
+            || this.op1.tipo == TipoDato.CHAR && this.op2.tipo == TipoDato.ENTERO
+            || this.op1.tipo == TipoDato.ENTERO && this.op2.tipo == TipoDato.CHAR
+            || this.op1.tipo == TipoDato.CHAR && this.op2.tipo == TipoDato.CHAR
+            || this.op1.tipo == TipoDato.BOOL && this.op2.tipo == TipoDato.BOOL
+            || this.op1.tipo == TipoDato.CADENA && this.op2.tipo == TipoDato.CADENA
+            || this.op1.tipo == TipoDato.DECIMAL && this.op2.tipo == TipoDato.CHAR
+            || this.op1.tipo == TipoDato.CHAR && this.op2.tipo == TipoDato.DECIMAL) {
 
             switch (this.operador) {
                 case "==":
-                    this.tipo = "BOOL";
+                    this.tipo = TipoDato.BOOL;
                     this.valor = op1 == op2;
                     return this.valor;
                 case "!=":
-                    this.tipo = "BOOL";
+                    this.tipo = TipoDato.BOOL;
                     this.valor = op1 != op2;
                     return this.valor;
                 case ">":
-                    this.tipo = "BOOL";
+                    this.tipo = TipoDato.BOOL;
                     this.valor = op1 > op2;
                     return this.valor;;
                 case "<":
-                    this.tipo = "BOOL";
+                    this.tipo = TipoDato.BOOL;
                     this.valor = op1 < op2;
                     return this.valor;
                 case ">=":
-                    this.tipo = "BOOL";
+                    this.tipo = TipoDato.BOOL;
                     this.valor = op1 >= op2;
                     return this.valor;
                 case "<=":
-                    this.tipo = "BOOL";
+                    this.tipo = TipoDato.BOOL;
                     this.valor = op1 <= op2;
                     return this.valor;
             }

@@ -3,6 +3,7 @@ const analizador =require('../Analizador/parser.js');
 const instruccion = require('../Interprete/instruccion.js');
 const {NodoAst} = require('../Interprete/graficar/NodoAst.js');
 const {graficarArbol} = require('../Interprete/graficar/GraficarTree.js');
+const {Entorno} = require('../Interprete/symbols/entorno.js');
 const index = (req, res) => {
     res.status(200).json({message: "Funcionando"})
 }
@@ -17,9 +18,10 @@ const analizar = (req, res) => {
     try{
         let init = new NodoAst("INICIO");
         let instrucciones = new NodoAst("INSTRUCCIONES");
+        let entornoglobal = new Entorno("GLOBAL",null);
         
         result.forEach(instruccion => {
-            regreso +=instruccion.interpretar(null);
+            regreso +=instruccion.interpretar(entornoglobal);
             regreso += "\n";
 
             instrucciones.agregarHijoAST(instruccion.getNodo());
