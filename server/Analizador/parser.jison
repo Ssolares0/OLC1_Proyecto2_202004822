@@ -139,8 +139,8 @@ print
     
 ;
 declaracion
-    : tipos listaval IGUAL expresion PUNTOCOMA {$$=new Declaracion($1,$2,$4);}
-    | tipos listaval PUNTOCOMA {$$=new Declaracion($1,$2,null);}
+    : tipos listaval IGUAL expresion PUNTOCOMA {$$=new Declaracion($2,$1,$4,@1.first_line,@1.first_column);}
+    | tipos listaval PUNTOCOMA {$$=new Declaracion($2,$1,null,@1.first_line,@1.first_column);}
 ;
 
 expresion 
@@ -164,15 +164,15 @@ expresion
 
 tipos
     : INT  {$$=$1;}
-    | STD DOSPUNTOS DOSPUNTOS STRING {$$=$1;}
+    | STD DOSPUNTOS DOSPUNTOS STRING {$$=$4;}
     | CHAR{$$=$1;}
     | BOOL  {$$=$1;}
     | DOUBLE    {$$=$1;}
 ;
 
 listaval
-    : listaval 'COMA' VARIABLES
-    | VARIABLES
+    : listaval 'COMA' VARIABLES { $$.push($3);$$=$1}
+    | VARIABLES {$$=[$1];}
 ;
 
 datos : ENTERO {$$=new Dato($1,TipoDato.ENTERO,@1.first_line,@1.first_column);}

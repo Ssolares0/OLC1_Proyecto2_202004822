@@ -1,68 +1,82 @@
-const {instruccion,TipoInstruccion}= require('../instruccion.js');
+const { instruccion, TipoInstruccion } = require('../instruccion.js');
 const { NodoAst } = require('../graficar/NodoAst.js');
-const Entorno = require('../symbols/entorno.js');
+//const Entorno = require('../symbols/entorno.js');
+const { TipoSimbolo } = require('../symbols/Symbol.js');
+const { TipoDato } = require('../Expresion.js');
 
 
 class Declaracion extends instruccion {
-    constructor(tipo, nombre, expresion, line, column) {
-        super(TipoInstruccion.DECLARACION,line, column);
+    constructor(id, tipo, expresion, line, column) {
+        super(TipoInstruccion.DECLARACION, line, column);
         this.expresion = expresion;
+        this.id = id;
         this.tipo = tipo;
-        this.nombre = nombre;
-        
-        
+        this.line = line;   
+        this.column = column;
+
+
 
     }
 
     interpretar(entorno) {
 
+        let id = this.id;
         let tipo = this.tipo;
-        let nombre = this.nombre;
 
         if (this.expresion == null) {
 
             if (tipo.toLowerCase() == "int") {
-                this.valor = 0;
+                this.expresion = 0;
             } else if (tipo.toLowerCase() == "double") {
-                this.valor = 0.0;
+                this.expresion = 0.0;
             } else if (tipo.toLowerCase() == "string") {
-                this.valor = "";
+                this.expresion = "";
             } else if (tipo.toLowerCase() == "char") {
-                this.valor = ' ';
-            } else if (tipo.toLowerCase() == "BOOL") {
-                this.valor = true;
+                this.expresion = ' ';
+            } else if (tipo.toLowerCase() == "bool") {
+                this.expresion = true;
             }
             console.log("entro a declaracion sin expresion");
-            console.log("tipo: " + tipo + " nombre: " + nombre + " valor: " + this.valor);
-            
-            let c = Entorno.save_variable(nombre,this.valor, tipo, "variable", this.line, this.column);
-            if(c == false){
-                console.log("Error semantico: la variable "+nombre+" ya existe");
+            //console.log("Id: " + id + " tipo: " + tipo + " valor: " + this.expresion);
+
+            let c = entorno.save_variable(id, this.expresion, tipo, TipoSimbolo.VARIABLE, this.line, this.column);
+            if (!c) {
+                console.log("Error semantico: la variable " + id + " ya fue declarada anteriormente");
                 return;
             }
-            
+
         } else if (this.expresion != null) {
             let value = this.expresion.interpretar(entorno);
+            console.log(value.TipoDato);
 
-            if (this.tipo.toLowerCase() == 'int' ||
-                this.tipo.toLowerCase() == 'double' ||
-                this.tipo.toLowerCase() == 'bool' ||
-                this.tipo.toLowerCase() == 'char' ||
-                this.tipo.toLowerCase() == 'string') {
+            if (tipo.toLowerCase() == 'int' && this.expresion.tipo == TipoDato.ENTERO|| 
+                tipo.toLowerCase() == 'double' && this.expresion.tipo == TipoDato.DECIMAL||
+                tipo.toLowerCase() == 'bool' && this.expresion.tipo == TipoDato.BOOL||
+                tipo.toLowerCase() == 'char' && this.expresion.tipo == TipoDato.CHAR||
+                tipo.toLowerCase() == 'string' && this.expresion.tipo == TipoDato.CADENA) {
 
                 //imprimimos los valores
                 console.log("entro a declaracion con expresion");
-                
-                console.log("tipo: " + tipo + " nombre: " + nombre + " valor: " + value);
 
+                let c = entorno.save_variable(id, value, tipo, TipoSimbolo.VARIABLE, this.line, this.column);
+                if (!c) {
+                    console.log("Error semantico: la variable " + id + " ya fue declarada anteriormente");
+                    return;
+                }
+               // console.log("id: " + id + " tipo: " + tipo + " valor: " + value);
+
+            } else{
+                this.tipo == TipoDato.ERROR;
+                console.log("Error semantico: el tipo de dato de la expresion no coincide con el tipo de la variable","Fila: "+this.line,"columna: "+this.column);
+                return this.expresion;
             }
 
 
-        }else {
+        } else {
             //Errores semanticos
-            this.tipo == "ERROR";
+            this.tipo == TipoDato.ERROR;
             console.log("Existe un Error semantico de tipo de dato");
-            return this.valor;
+            return this.expresion;
 
         }
 
@@ -70,14 +84,18 @@ class Declaracion extends instruccion {
 
     }
     getNodo() {
-        let nodo = new NodoAst("DECLARACION");
+        var nodo = new NodoAst("DECLARACION");
+        /*
         nodo.agregarHijo(this.tipo);
-        nodo.agregarHijo(this.nombre);
+        nodo.agregarHijo(this.id);
         if (this.expresion != null) {
-            nodo.agregarHijo("=");
+            console.log("No graficamos nada")
+
+        } else {
+            
             nodo.agregarHijoAST(this.expresion.getNodo());
         }
-        nodo.agregarHijo(";");
+        */
         return nodo;
     }
 }

@@ -32,7 +32,7 @@ const analizar = (req, res) => {
     } catch (error) {
         console.log("Hubo un Error al mandar la entrada a interpretar",error);
     }
-
+    
     res.status(200).json({message: "Funcion analizar",salida:regreso}) //respuesta
 }
 

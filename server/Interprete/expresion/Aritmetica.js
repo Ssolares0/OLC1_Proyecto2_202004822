@@ -1,8 +1,8 @@
 const e = require('express');
 const instruccion = require('../instruccion.js');
-const {Expresion,TipoDato} = require('../Expresion.js');
 const { NodoAst } = require('../graficar/NodoAst.js');
 const { Entorno } = require('../symbols/entorno.js');
+const {Expresion,TipoDato} = require('../Expresion.js');
 
 
 class Aritmetica extends Expresion {

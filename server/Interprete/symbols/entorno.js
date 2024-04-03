@@ -11,13 +11,25 @@ class Entorno {
 
     }
 
-    save_variable(nombre,valor, tipo, typedata, line, column) {
-        if (this.variables.has(nombre)) {
-            return false;
+    save_variable(nombre, valor, tipo, typedata, line, column) {
+
+        for (let i = 0; i < nombre.length; i++) {
+            if (this.variables.has(nombre[i])) {
+                return false;
+            } else {
+                this.variables.set(nombre[i], new symbolo1.Symbol(nombre[i], valor, tipo, typedata, line, column));
+                
+            }
         }
-        this.variables.set(nombre, new symbolo1.Symbol(nombre,valor, tipo, typedata, line, column));
-        return true;
+        console.log(this.variables);
+        return true
+        
+        
+        
+        
     }
+    
+    
 
     get_variable(nombre) {
         for (let e = this; e != null; e = e.anterior) {

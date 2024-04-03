@@ -92,7 +92,7 @@ break;
 case 3:
 this.$=[]; this.$.push($$[$0]);
 break;
-case 4: case 5: case 25: case 26: case 28: case 29: case 30: case 38:
+case 4: case 5: case 25: case 26: case 27: case 28: case 29: case 30: case 38:
 this.$=$$[$0];
 break;
 case 6:
@@ -108,10 +108,10 @@ case 9:
 this.$=new Print($$[$0-2],_$[$0-4].first_line,_$[$0-4].first_column);
 break;
 case 10:
-this.$=new Declaracion($$[$0-4],$$[$0-3],$$[$0-1]);
+this.$=new Declaracion($$[$0-3],$$[$0-4],$$[$0-1],_$[$0-4].first_line,_$[$0-4].first_column);
 break;
 case 11:
-this.$=new Declaracion($$[$0-2],$$[$0-1],null);
+this.$=new Declaracion($$[$0-1],$$[$0-2],null,_$[$0-2].first_line,_$[$0-2].first_column);
 break;
 case 12:
 this.$=new Aritmetica($$[$0],$$[$0],'NEGACION');
@@ -128,8 +128,11 @@ break;
 case 24:
 this.$=new Logicos($$[$0],$$[$0],$$[$0-1],_$[$0-1].first_line,_$[$0-1].first_column);
 break;
-case 27:
-this.$=$$[$0-3];
+case 31:
+ this.$.push($$[$0]);this.$=$$[$0-2]
+break;
+case 32:
+this.$=[$$[$0]];
 break;
 case 33:
 this.$=new Dato($$[$0],TipoDato.ENTERO,_$[$0].first_line,_$[$0].first_column);
