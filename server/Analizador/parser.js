@@ -401,7 +401,7 @@ _handle_error:
     return true;
 }};
 
-    const {TipoDato}= require('../Interprete/expresion.js');
+    const {TipoDato}= require('../Interprete/Expresion.js');
     const Dato = require('../Interprete/expresion/Dato.js');
     const Print = require('../Interprete/instruccion/print.js');
     const Aritmetica =require('../Interprete/expresion/Aritmetica.js');
