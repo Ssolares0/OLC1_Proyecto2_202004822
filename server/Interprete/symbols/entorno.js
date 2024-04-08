@@ -1,9 +1,10 @@
+const { TipoDato } = require('../Expresion.js');
 const symbolo1 = require('./Symbol.js');
 
 
 class Entorno {
 
-    constructor(nombre,anterior) {
+    constructor(nombre, anterior) {
         this.nombre = nombre;
         this.anterior = anterior;
         this.variables = new Map();
@@ -18,26 +19,31 @@ class Entorno {
                 return false;
             } else {
                 this.variables.set(nombre[i], new symbolo1.Symbol(nombre[i], valor, tipo, typedata, line, column));
-                
+                console.log("Se guardo la variable: " + nombre[i] + " con valor: " + valor);
+
             }
         }
-        console.log(this.variables);
+
         return true
-        
-        
-        
-        
+
     }
-    
-    
+
+
 
     get_variable(nombre) {
-        for (let e = this; e != null; e = e.anterior) {
-            if (e.variables.has(nombre)) {
-                return e.variables.get(nombre);
-            }
+
+        let valor = null;
+        let tipo = "ERROR";
+        
+        if (this.variables.has(nombre)) {
+            //console.log("Se encontro la variable: " + this.variables.get(nombre).valor);
+            valor = this.variables.get(nombre).valor;
+            tipo  = this.variables.get(nombre).tipo;
+
+            return {valorr:valor,tipoo:tipo};
+        } else {
+            return {valorr:valor,tipoo:tipo};
         }
-        return null;
     }
 
 }

@@ -13,8 +13,9 @@ class Relacionales extends Expresion {
     }
 
     interpretar(entorno) {
-        this.op1.interpretar(entorno);
-        this.op2.interpretar(entorno);
+        let op1 = this.op1.interpretar(entorno);
+        let op2 = this.op2.interpretar(entorno);
+        
 
         if (this.op1.tipo == TipoDato.ENTERO && this.op2.tipo == TipoDato.ENTERO
             || this.op1.tipo == TipoDato.ENTERO && this.op2.tipo == TipoDato.DECIMAL
@@ -41,7 +42,7 @@ class Relacionales extends Expresion {
                 case ">":
                     this.tipo = TipoDato.BOOL;
                     this.valor = op1 > op2;
-                    return this.valor;;
+                    return this.valor;
                 case "<":
                     this.tipo = TipoDato.BOOL;
                     this.valor = op1 < op2;

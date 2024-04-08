@@ -12,8 +12,9 @@ class Print extends instruccion{
         let value =this.expresion.interpretar(entorno);
         if(this.expresion.tipo == TipoDato.ERROR){
             console.log("Error semantico: no se pueden imprimir errores");
-            return this;
+            return "Error semantico: no se pueden imprimir errores";
         }
+
         console.log(value);
         return value;
         

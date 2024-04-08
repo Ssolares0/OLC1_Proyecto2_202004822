@@ -47,7 +47,7 @@ class Declaracion extends instruccion {
 
         } else if (this.expresion != null) {
             let value = this.expresion.interpretar(entorno);
-            console.log(value.TipoDato);
+            
 
             if (tipo.toLowerCase() == 'int' && this.expresion.tipo == TipoDato.ENTERO|| 
                 tipo.toLowerCase() == 'double' && this.expresion.tipo == TipoDato.DECIMAL||
@@ -58,7 +58,7 @@ class Declaracion extends instruccion {
                 //imprimimos los valores
                 console.log("entro a declaracion con expresion");
 
-                let c = entorno.save_variable(id, value, tipo, TipoSimbolo.VARIABLE, this.line, this.column);
+                let c = entorno.save_variable(id, value, this.expresion.tipo, TipoSimbolo.VARIABLE, this.line, this.column);
                 if (!c) {
                     console.log("Error semantico: la variable " + id + " ya fue declarada anteriormente");
                     return;
@@ -84,18 +84,13 @@ class Declaracion extends instruccion {
 
     }
     getNodo() {
-        var nodo = new NodoAst("DECLARACION");
-        /*
-        nodo.agregarHijo(this.tipo);
-        nodo.agregarHijo(this.id);
-        if (this.expresion != null) {
-            console.log("No graficamos nada")
-
-        } else {
-            
-            nodo.agregarHijoAST(this.expresion.getNodo());
-        }
-        */
+        let nodo = new NodoAst("DECLARACION");
+        
+        //nodo.agregarHijoAST(this.tipo.getNodo());
+        // nodo.agregarHijoAST(this.id.getNodo());
+        
+        
+        
         return nodo;
     }
 }

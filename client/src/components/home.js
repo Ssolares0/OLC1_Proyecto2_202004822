@@ -41,6 +41,7 @@ export const Home = () => {
 
     const handleTextAreaChange = event => {
         const text = event.target.value;
+
         setData(text);
     };
 
@@ -94,7 +95,7 @@ export const Home = () => {
             .then(result => {
                 // Aquí puedes trabajar con la respuesta JSON recibida
                 //lo mostramos en el text area 2
-
+                // si el texto recibido es undefined lo omitimos
                 
                 document.querySelector('.text-area2').value = result.salida;
             })
@@ -139,7 +140,7 @@ export const Home = () => {
                             <button id="openArbol" onClick={openArbolAst} class="btn btn-light" type="button">Reporte Arbol</button>
 
                         </li>
-                       
+
                         <a class="nav-item nav-link disabled" href="#">Reporte Simbolos</a>
                     </div>
                 </div>

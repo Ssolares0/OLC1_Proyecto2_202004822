@@ -25,6 +25,8 @@ comentarios "//".* ;
 "bool"                  { return 'BOOL'; }
 "double"                { return 'DOUBLE'; }
 "std"                   { return 'STD'; }
+"if"                    { return 'IF'; }
+"else"                  { return 'ELSE'; }
 
 "println"               { return 'RPRINTLN'; }
 "cout"                  { return 'RCOUT'; }
@@ -97,6 +99,8 @@ comentarios "//".* ;
     const Logicos =require('../Interprete/expresion/Logicos.js');
     const Relacionales =require('../Interprete/expresion/Relacionales.js');
     const Declaracion =require('../Interprete/instruccion/declaracion.js');
+    const If =require('../Interprete/instruccion/if.js');
+    const Vars = require('../Interprete/expresion/Vars.js');
 
 %}
 
@@ -128,6 +132,7 @@ listainstruccion
 instruccion
 	: print  {$$=$1;}
     | declaracion {$$=$1;}
+    | instrIf {$$=$1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
 
@@ -143,11 +148,23 @@ declaracion
     | tipos listaval PUNTOCOMA {$$=new Declaracion($2,$1,null,@1.first_line,@1.first_column);}
 ;
 
+instrIf
+    : IF PARIZQ expresion PARDER LLAIZQ listainstruccion LLADER instrElse {$$=new If($3,$6,$8,@1.first_line,@1.first_column);}
+;
+
+instrElse
+    : ELSE LLAIZQ listainstruccion LLADER {$$=$3;}
+    | ELSE instrIf {$$=$2;}
+    | {$$=null;}
+;
 expresion 
     : MENOS expresion %prec 'UMENOS' {$$=new Aritmetica($2,$2,'NEGACION');}
     | expresion MAS expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
     | expresion MENOS expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
     | expresion POR expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion DIV expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion POTENCIA expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
+    | expresion MODULO expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
     | expresion REL_IGUAL expresion {$$=new Relacionales($1,$3,$2,@1.first_line,@1.first_column);}
     | expresion MENOR expresion {$$=new Relacionales($1,$3,$2,@1.first_line,@1.first_column);}
     | expresion MAYOR expresion {$$=new Relacionales($1,$3,$2,@1.first_line,@1.first_column);}
@@ -180,5 +197,5 @@ datos : ENTERO {$$=new Dato($1,TipoDato.ENTERO,@1.first_line,@1.first_column);}
         | CARACTER {$$=new Dato($1,TipoDato.CHAR,@1.first_line,@1.first_column);}
         | CADENA {$$=new Dato($1,TipoDato.CADENA,@1.first_line,@1.first_column);}
         | BOOL {$$=new Dato($1,TipoDato.BOOL,@1.first_line,@1.first_column);}
-        | VARIABLES {$$=$1;}
+        | VARIABLES {$$ = new Vars($1,@1.first_line, @1.first_column);}
 ;
