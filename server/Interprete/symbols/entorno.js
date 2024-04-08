@@ -46,5 +46,16 @@ class Entorno {
         }
     }
 
+    actualizar_variable(nombre, valor) {
+        if (this.variables.has(nombre)) {
+            this.variables.get(nombre).valor = valor;
+            console.log("Se actualizo la variable: " + nombre + " con valor: " + valor);
+            return true;
+        } else {
+            console.log("No se encontro la variable: " + nombre);
+            return false;
+        }
+    }
+
 }
 exports.Entorno = Entorno;  

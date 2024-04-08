@@ -30,12 +30,14 @@ class If extends instruccion {
             //GUARDAMOS ENTORNO
             
         } else {
+            let entornoElse = new Entorno(TipoInstruccion.ELSE, entorno);
             if (this.siNo != null) {
 
                 this.siNo.forEach(instruccion => {
-                    instruccion.interpretar(entornoIf);
+                    value =instruccion.interpretar(entornoElse);
+                    value += "\n";
                 });
-                
+                return value;
 
             } 
 

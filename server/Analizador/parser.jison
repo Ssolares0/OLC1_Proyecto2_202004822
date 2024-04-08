@@ -27,6 +27,7 @@ comentarios "//".* ;
 "std"                   { return 'STD'; }
 "if"                    { return 'IF'; }
 "else"                  { return 'ELSE'; }
+"new"                   { return 'NEW'; }
 
 "println"               { return 'RPRINTLN'; }
 "cout"                  { return 'RCOUT'; }
@@ -38,8 +39,12 @@ comentarios "//".* ;
 ")"                     { return 'PARDER'; }
 "{"                     { return 'LLAIZQ'; }
 "}"                     { return 'LLADER'; }
+"["                     { return 'CORCHIZQ'; }
+"]"                     { return 'CORCHDER'; }
 ";"                     { return 'PUNTOCOMA'; }
 ","                     { return 'COMA'; }
+"++"                    { return 'INCREMENTO'; }
+"--"                    { return 'DECREMENTO'; }
 "+"                     { return 'MAS'; }
 "-"                     { return 'MENOS'; }
 "/"                     { return 'DIV'; }
@@ -101,6 +106,7 @@ comentarios "//".* ;
     const Declaracion =require('../Interprete/instruccion/declaracion.js');
     const If =require('../Interprete/instruccion/if.js');
     const Vars = require('../Interprete/expresion/Vars.js');
+    const IncreDecre = require('../Interprete/expresion/IncreDecre.js');
 
 %}
 
@@ -131,7 +137,9 @@ listainstruccion
 
 instruccion
 	: print  {$$=$1;}
-    | declaracion {$$=$1;}
+    | declaraVar {$$=$1;}
+    | declaraVect {$$=$1;}
+    | incanddec {$$=$1;}
     | instrIf {$$=$1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
@@ -143,9 +151,20 @@ print
 
     
 ;
-declaracion
+declaraVar
     : tipos listaval IGUAL expresion PUNTOCOMA {$$=new Declaracion($2,$1,$4,@1.first_line,@1.first_column);}
     | tipos listaval PUNTOCOMA {$$=new Declaracion($2,$1,null,@1.first_line,@1.first_column);}
+;
+
+declaraVect
+    : tipos listaval CORCHIZQ CORCHDER IGUAL NEW tipos CORCHIZQ datos CORCHDER PUNTOCOMA {$$=new Declaracion($2,$1,$9,$7,$4,@1.first_line,@1.first_column);}
+    | tipos listaval CORCHIZQ CORCHDER CORCHIZQ CORCHDER IGUAL NEW tipos CORCHIZQ datos CORCHDER CORCHIZQ datos CORCHDER PUNTOCOMA {$$=new Declaracion($2,$1,null,null,@1.first_line,@1.first_column);}
+
+;
+incanddec
+    : VARIABLES INCREMENTO PUNTOCOMA {$$=new IncreDecre($1,$2,@1.first_line,@1.first_column);}
+    | VARIABLES DECREMENTO PUNTOCOMA {$$=new IncreDecre($1,$2,@1.first_line,@1.first_column);}
+
 ;
 
 instrIf

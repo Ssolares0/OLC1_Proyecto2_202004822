@@ -24,22 +24,22 @@ class Declaracion extends instruccion {
         let tipo = this.tipo;
 
         if (this.expresion == null) {
-
+            let value = null;
             if (tipo.toLowerCase() == "int") {
-                this.expresion = 0;
+                value = 0;
             } else if (tipo.toLowerCase() == "double") {
-                this.expresion = 0.0;
+                value = 0.0;
             } else if (tipo.toLowerCase() == "string") {
-                this.expresion = "";
+                value = "";
             } else if (tipo.toLowerCase() == "char") {
-                this.expresion = ' ';
+                value = ' ';
             } else if (tipo.toLowerCase() == "bool") {
-                this.expresion = true;
+                value = true;
             }
             console.log("entro a declaracion sin expresion");
             //console.log("Id: " + id + " tipo: " + tipo + " valor: " + this.expresion);
 
-            let c = entorno.save_variable(id, this.expresion, tipo, TipoSimbolo.VARIABLE, this.line, this.column);
+            let c = entorno.save_variable(id, value, tipo, TipoSimbolo.VARIABLE, this.line, this.column);
             if (!c) {
                 console.log("Error semantico: la variable " + id + " ya fue declarada anteriormente");
                 return;
@@ -85,6 +85,17 @@ class Declaracion extends instruccion {
     }
     getNodo() {
         let nodo = new NodoAst("DECLARACION");
+        
+        nodo.agregarHijo(this.tipo.toString());
+        nodo.agregarHijo(this.id.toString());
+        if (this.expresion != null) {
+            nodo.agregarHijo("=");
+            nodo.agregarHijoAST(this.expresion.getNodo());
+        }
+
+        
+       
+        
         
         //nodo.agregarHijoAST(this.tipo.getNodo());
         // nodo.agregarHijoAST(this.id.getNodo());
