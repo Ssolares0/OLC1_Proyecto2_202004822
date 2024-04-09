@@ -32,6 +32,10 @@ comentarios "//".* ;
 "println"               { return 'RPRINTLN'; }
 "cout"                  { return 'RCOUT'; }
 "endl"                  { return 'RENDL'; }
+"switch"                { return 'SWITCH'; }
+"case"                  { return 'CASE'; }
+"default"                { return 'DEFAULT'; }
+
 
 
 "<<"                    { return 'MENOR_MENOR'; }
@@ -107,6 +111,7 @@ comentarios "//".* ;
     const If =require('../Interprete/instruccion/if.js');
     const Vars = require('../Interprete/expresion/Vars.js');
     const IncreDecre = require('../Interprete/expresion/IncreDecre.js');
+    const Switch = require('../Interprete/instruccion/Switch.js');
 
 %}
 
@@ -141,6 +146,7 @@ instruccion
     | declaraVect {$$=$1;}
     | incanddec {$$=$1;}
     | instrIf {$$=$1;}
+    | switches {$$=$1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
 
@@ -176,6 +182,10 @@ instrElse
     | ELSE instrIf {$$=$2;}
     | {$$=null;}
 ;
+
+switches
+    : SWITCH PARIZQ expresion PARDER LLAIZQ listacasos DEFAULT DOSPUNTOS listainstruccion LLADER {$$=new Switch($3,$6,$9,@1.first_line,@1.first_column);}
+;   
 expresion 
     : MENOS expresion %prec 'UMENOS' {$$=new Aritmetica($2,$2,'NEGACION');}
     | expresion MAS expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
@@ -209,6 +219,18 @@ tipos
 listaval
     : listaval 'COMA' VARIABLES { $$.push($3);$$=$1}
     | VARIABLES {$$=[$1];}
+;
+
+listacasos
+    : listacasos caso {$$=$1; $$.push($2);}
+    | caso {$$=[$1];}
+
+    
+;
+
+caso 
+    : CASE datos DOSPUNTOS listainstruccion {$$={case: $2,body:$4};}
+    
 ;
 
 datos : ENTERO {$$=new Dato($1,TipoDato.ENTERO,@1.first_line,@1.first_column);}

@@ -16,6 +16,7 @@ const TipoInstruccion ={
     IF: 'IF',
     ELSE: 'ELSE',   
     DECLARACION: 'DECLARACION', 
+    SWITCH: 'SWITCH',
 }
 
 module.exports = {instruccion,TipoInstruccion};
