@@ -17,6 +17,7 @@ const TipoInstruccion ={
     ELSE: 'ELSE',   
     DECLARACION: 'DECLARACION', 
     SWITCH: 'SWITCH',
+    WHILE: 'WHILE',
 }
 
 module.exports = {instruccion,TipoInstruccion};

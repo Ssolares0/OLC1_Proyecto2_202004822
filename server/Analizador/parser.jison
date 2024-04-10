@@ -34,9 +34,10 @@ comentarios "//".* ;
 "endl"                  { return 'RENDL'; }
 "switch"                { return 'SWITCH'; }
 "case"                  { return 'CASE'; }
-"default"                { return 'DEFAULT'; }
-
-
+"default"               { return 'DEFAULT'; }
+"break"                 { return 'BREAK'; }
+"continue"              { return 'CONTINUE'; }
+"while"                 { return 'WHILE';}
 
 "<<"                    { return 'MENOR_MENOR'; }
 "("                     { return 'PARIZQ'; }
@@ -112,6 +113,8 @@ comentarios "//".* ;
     const Vars = require('../Interprete/expresion/Vars.js');
     const IncreDecre = require('../Interprete/expresion/IncreDecre.js');
     const Switch = require('../Interprete/instruccion/Switch.js');
+    const Breaks = require('../Interprete/instruccion/breaks.js');
+    const Whiles = require('../Interprete/instruccion/Whiles.js');
 
 %}
 
@@ -147,6 +150,8 @@ instruccion
     | incanddec {$$=$1;}
     | instrIf {$$=$1;}
     | switches {$$=$1;}
+    | instrWhile {$$=$1;}
+    | sentenControl {$$=$1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
 
@@ -173,6 +178,10 @@ incanddec
 
 ;
 
+instrTernario
+: expresion TERNARIO expresion DOSPUNTOS expresion {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column);}
+;
+
 instrIf
     : IF PARIZQ expresion PARDER LLAIZQ listainstruccion LLADER instrElse {$$=new If($3,$6,$8,@1.first_line,@1.first_column);}
 ;
@@ -183,9 +192,19 @@ instrElse
     | {$$=null;}
 ;
 
-switches
+
+
+switches    
     : SWITCH PARIZQ expresion PARDER LLAIZQ listacasos DEFAULT DOSPUNTOS listainstruccion LLADER {$$=new Switch($3,$6,$9,@1.first_line,@1.first_column);}
+    | SWITCH PARIZQ expresion PARDER LLAIZQ listacasos LLADER {$$=new Switch($3,$6,null,@1.first_line,@1.first_column);}
+    | SWITCH PARIZQ expresion PARDER LLAIZQ DEFAULT DOSPUNTOS listainstruccion LLADER {$$=new Switch($3,null,$8,@1.first_line,@1.first_column);}
 ;   
+
+
+instrWhile
+    : WHILE PARIZQ expresion PARDER LLAIZQ listainstruccion LLADER {$$=new Whiles($3,$6,@1.first_line,@1.first_column);}
+;
+
 expresion 
     : MENOS expresion %prec 'UMENOS' {$$=new Aritmetica($2,$2,'NEGACION');}
     | expresion MAS expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
@@ -231,6 +250,11 @@ listacasos
 caso 
     : CASE datos DOSPUNTOS listainstruccion {$$={case: $2,body:$4};}
     
+;
+sentenControl
+    :   BREAK PUNTOCOMA {$$= new Breaks(@1.first_line,@1.first_column);}
+    |   CONTINUE PUNTOCOMA {$$='continue';}
+
 ;
 
 datos : ENTERO {$$=new Dato($1,TipoDato.ENTERO,@1.first_line,@1.first_column);}

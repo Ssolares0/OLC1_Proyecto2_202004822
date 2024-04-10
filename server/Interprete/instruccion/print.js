@@ -23,6 +23,8 @@ class Print extends instruccion{
         let nodo = new NodoAst("PRINT");
         nodo.agregarHijo("println");
         nodo.agregarHijo("(");
+        
+        
         nodo.agregarHijoAST(this.expresion.getNodo());
         nodo.agregarHijo(")");
         nodo.agregarHijo(";");
