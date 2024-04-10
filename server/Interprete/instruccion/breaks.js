@@ -7,7 +7,7 @@ const { TipoDato } = require('../Expresion.js');
 
 class Breaks extends instruccion {
     constructor(fila, columna) {
-        super(TipoInstruccion.BREAK, fila, columna);
+        super( fila, columna);
         this.fila = fila;
         this.columna = columna;
 

@@ -34,15 +34,20 @@ class Entorno {
 
         let valor = null;
         let tipo = "ERROR";
-        
+
         if (this.variables.has(nombre)) {
             //console.log("Se encontro la variable: " + this.variables.get(nombre).valor);
             valor = this.variables.get(nombre).valor;
-            tipo  = this.variables.get(nombre).tipo;
+            tipo = this.variables.get(nombre).tipo;
 
-            return {valorr:valor,tipoo:tipo};
+            return { valorr: valor, tipoo: tipo };
         } else {
-            return {valorr:valor,tipoo:tipo};
+            // Si no se encuentra la variable en el entorno actual, buscar en el entorno anterior
+            if (this.anterior != null) {
+                return this.anterior.get_variable(nombre);
+            } else {
+                return { valorr: valor, tipoo: tipo };
+            }
         }
     }
 
@@ -52,8 +57,13 @@ class Entorno {
             console.log("Se actualizo la variable: " + nombre + " con valor: " + valor);
             return true;
         } else {
-            console.log("No se encontro la variable: " + nombre);
-            return false;
+            if (this.anterior != null) {
+                return this.anterior.actualizar_variable(nombre,valor);
+            }else{
+                console.log("No se encontro la variable: " + nombre);
+                return false;
+            }
+            
         }
     }
 

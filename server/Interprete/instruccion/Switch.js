@@ -13,7 +13,7 @@ class Casebody {
 }
 class Switch extends instruccion {
     constructor(expresion, casos, defaults, fila, columna) {
-        super(TipoInstruccion.SWITCH, fila, columna);
+        super( fila, columna);
         this.expresion = expresion;
         this.casos = casos;
         this.defaults = defaults;

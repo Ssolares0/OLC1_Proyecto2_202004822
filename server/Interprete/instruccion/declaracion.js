@@ -7,7 +7,7 @@ const { TipoDato } = require('../Expresion.js');
 
 class Declaracion extends instruccion {
     constructor(id, tipo, expresion, line, column) {
-        super(TipoInstruccion.DECLARACION, line, column);
+        super( line, column);
         this.expresion = expresion;
         this.id = id;
         this.tipo = tipo;

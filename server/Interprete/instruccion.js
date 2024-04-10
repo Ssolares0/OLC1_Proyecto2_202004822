@@ -18,6 +18,7 @@ const TipoInstruccion ={
     DECLARACION: 'DECLARACION', 
     SWITCH: 'SWITCH',
     WHILE: 'WHILE',
+    GLOBAL : 'GLOBAL',
 }
 
 module.exports = {instruccion,TipoInstruccion};

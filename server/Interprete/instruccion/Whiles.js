@@ -9,7 +9,7 @@ const Breaks = require('./breaks.js');
 
 class Whiles extends instruccion{
     constructor(condicion,instr,fila,columna){
-        super(TipoInstruccion.WHILE,fila,columna);
+        super(fila,columna);
         this.condicion = condicion;
         this.instr = instr;
     }
@@ -22,20 +22,26 @@ class Whiles extends instruccion{
             console.log('Error semantico: la condicion no es booleana');
             return this;
         }
-        while(String(this.condicion.valor).toLowerCase() === "true"){
+        console.log(this.condicion.valor)
+        while(this.condicion.valor){
             this.instr.forEach(instruccion => {
-                value +=this.instr.interpretar(entornoWhile);
+                value +=instruccion.interpretar(entornoWhile);
                 value += "\n";
             });
             let cond = this.condicion.interpretar(entornoWhile);
             if(this.condicion.tipo != 'BOOL'){
-                console.log('Error semantico: la condicion no es booleana');
-                return this;
+               //Errores semanticos
+               this.tipo == TipoDato.ERROR;
+               console.log("Existe un Error semantico de tipo de dato");
+               return this.valor;
             }
-
-            return value;
+            if(this.condicion.valor == false){
+                break;
+            }
+            
         }
-        return this;
+        return value;
+        
 
     }
     getNodo(){
