@@ -38,6 +38,7 @@ comentarios "//".* ;
 "break"                 { return 'BREAK'; }
 "continue"              { return 'CONTINUE'; }
 "while"                 { return 'WHILE';}
+"for"                   { return 'FOR';}
 
 "<<"                    { return 'MENOR_MENOR'; }
 "("                     { return 'PARIZQ'; }
@@ -110,11 +111,14 @@ comentarios "//".* ;
     const Relacionales =require('../Interprete/expresion/Relacionales.js');
     const Declaracion =require('../Interprete/instruccion/declaracion.js');
     const If =require('../Interprete/instruccion/if.js');
+    const Ternario = require('../Interprete/expresion/Ternario.js');
     const Vars = require('../Interprete/expresion/Vars.js');
     const IncreDecre = require('../Interprete/expresion/IncreDecre.js');
     const Switch = require('../Interprete/instruccion/Switch.js');
     const Breaks = require('../Interprete/instruccion/breaks.js');
     const Whiles = require('../Interprete/instruccion/Whiles.js');
+    const Fors = require('../Interprete/instruccion/Fors.js');
+    const Asignacion = require('../Interprete/instruccion/Asignacion.js');
 
 %}
 
@@ -144,42 +148,47 @@ listainstruccion
 ;
 
 instruccion
-	: print  {$$=$1;}
-    | declaraVar {$$=$1;}
-    | declaraVect {$$=$1;}
-    | incanddec {$$=$1;}
+	: print PUNTOCOMA {$$=$1;}
+    | declaraVar PUNTOCOMA {$$=$1;}
+    | declaraVect PUNTOCOMA {$$=$1;}
+    | asignacion  PUNTOCOMA {$$=$1;}
+    | incanddec PUNTOCOMA {$$=$1;}
     | instrIf {$$=$1;}
     | switches {$$=$1;}
     | instrWhile {$$=$1;}
-    | sentenControl {$$=$1;}
+    | instrFor {$$=$1;}
+    | sentenControl  PUNTOCOMA {$$=$1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
 
 print
-    : RCOUT MENOR_MENOR expresion PUNTOCOMA {$$=new Print($3,@1.first_line,@1.first_column);}
-    | RCOUT MENOR_MENOR expresion MENOR_MENOR RENDL PUNTOCOMA {$$=new Print($3,@1.first_line,@1.first_column);}
-    | RPRINTLN PARIZQ expresion PARDER PUNTOCOMA {$$=new Print($3,@1.first_line,@1.first_column);}
+    : RCOUT MENOR_MENOR expresion  {$$=new Print($3,@1.first_line,@1.first_column);}
+    | RCOUT MENOR_MENOR expresion MENOR_MENOR RENDL  {$$=new Print($3,@1.first_line,@1.first_column);}
+    | RPRINTLN PARIZQ expresion PARDER  {$$=new Print($3,@1.first_line,@1.first_column);}
 
     
 ;
 declaraVar
-    : tipos listaval IGUAL expresion PUNTOCOMA {$$=new Declaracion($2,$1,$4,@1.first_line,@1.first_column);}
-    | tipos listaval PUNTOCOMA {$$=new Declaracion($2,$1,null,@1.first_line,@1.first_column);}
+    : tipos listaval IGUAL expresion  {$$=new Declaracion($2,$1,$4,@1.first_line,@1.first_column);}
+    | tipos listaval  {$$=new Declaracion($2,$1,null,@1.first_line,@1.first_column);}
+    | tipos listaval IGUAL instrTernario  {$$=new Declaracion($2,$1,$4,@1.first_line,@1.first_column);}
+    
 ;
 
 declaraVect
-    : tipos listaval CORCHIZQ CORCHDER IGUAL NEW tipos CORCHIZQ datos CORCHDER PUNTOCOMA {$$=new Declaracion($2,$1,$9,$7,$4,@1.first_line,@1.first_column);}
-    | tipos listaval CORCHIZQ CORCHDER CORCHIZQ CORCHDER IGUAL NEW tipos CORCHIZQ datos CORCHDER CORCHIZQ datos CORCHDER PUNTOCOMA {$$=new Declaracion($2,$1,null,null,@1.first_line,@1.first_column);}
+    : tipos listaval CORCHIZQ CORCHDER IGUAL NEW tipos CORCHIZQ datos CORCHDER  {$$=new Declaracion($2,$1,$9,$7,$4,@1.first_line,@1.first_column);}
+    | tipos listaval CORCHIZQ CORCHDER CORCHIZQ CORCHDER IGUAL NEW tipos CORCHIZQ datos CORCHDER CORCHIZQ datos CORCHDER  {$$=new Declaracion($2,$1,null,null,@1.first_line,@1.first_column);}
 
 ;
 incanddec
-    : VARIABLES INCREMENTO PUNTOCOMA {$$=new IncreDecre($1,$2,@1.first_line,@1.first_column);}
-    | VARIABLES DECREMENTO PUNTOCOMA {$$=new IncreDecre($1,$2,@1.first_line,@1.first_column);}
+    : VARIABLES INCREMENTO  {$$=new IncreDecre($1,$2,@1.first_line,@1.first_column);}
+    | VARIABLES DECREMENTO  {$$=new IncreDecre($1,$2,@1.first_line,@1.first_column);}
+    
 
 ;
 
 instrTernario
-: expresion TERNARIO expresion DOSPUNTOS expresion {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column);}
+    : expresion TERNARIO datos DOSPUNTOS datos {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column);}
 ;
 
 instrIf
@@ -205,6 +214,20 @@ instrWhile
     : WHILE PARIZQ expresion PARDER LLAIZQ listainstruccion LLADER {$$=new Whiles($3,$6,@1.first_line,@1.first_column);}
 ;
 
+instrFor
+    : FOR PARIZQ for_declaracion  PUNTOCOMA expresion PUNTOCOMA incanddec  PARDER LLAIZQ listainstruccion LLADER {$$=new Fors($3,$5,$7,$10,@1.first_line,@1.first_column);}
+ 
+;
+
+for_declaracion
+    : declaraVar   {$$=$1;}
+    | asignacion   {$$=$1;}
+      
+;    
+asignacion
+    : VARIABLES IGUAL expresion  {$$=new Asignacion($1,$3,@1.first_line,@1.first_column);}
+
+;
 expresion 
     : MENOS expresion %prec 'UMENOS' {$$=new Aritmetica($2,$2,'NEGACION');}
     | expresion MAS expresion {$$=new Aritmetica($1,$3,$2,@1.first_line,@1.first_column);}
@@ -252,8 +275,8 @@ caso
     
 ;
 sentenControl
-    :   BREAK PUNTOCOMA {$$= new Breaks(@1.first_line,@1.first_column);}
-    |   CONTINUE PUNTOCOMA {$$='continue';}
+    :   BREAK  {$$= new Breaks(@1.first_line,@1.first_column);}
+    |   CONTINUE  {$$='continue';}
 
 ;
 

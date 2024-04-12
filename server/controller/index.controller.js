@@ -36,8 +36,22 @@ const analizar = (req, res) => {
     res.status(200).json({message: "Funcion analizar",salida:regreso}) //respuesta
 }
 
+const simbolos = (req, res) => {
+   
+    try{
+        let c = Entorno.getEntorno();
+        console.log(c);
+
+    } catch (error) {
+        console.log("Hubo un Error al mandar la entrada a interpretar",error);
+    }
+    
+    res.status(200).json({message: "Funcion analizar",salida:regreso}) //respuesta
+}
+
 
 module.exports = {
     index,
-    analizar
+    analizar,
+    simbolos
 }

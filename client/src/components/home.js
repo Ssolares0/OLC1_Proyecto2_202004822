@@ -3,13 +3,6 @@ import React, { useState, useEffect } from 'react';
 
 
 
-
-
-
-
-
-
-
 export const Home = () => {
     const [entrada, setData] = useState('');
 
@@ -96,7 +89,7 @@ export const Home = () => {
                 // Aquí puedes trabajar con la respuesta JSON recibida
                 //lo mostramos en el text area 2
                 // si el texto recibido es undefined lo omitimos
-                
+
                 document.querySelector('.text-area2').value = result.salida;
             })
             .catch(error => {
@@ -105,6 +98,33 @@ export const Home = () => {
             });
 
 
+    };
+
+    const getSimbolos = async (e) => {
+        e.preventDefault();
+        await fetch('http://localhost:4000/simbolos', {
+            method: 'GET',
+            body: JSON.stringify({
+                entrada: entrada,
+
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(res => res.json())
+
+            .then(result => {
+                // Aquí puedes trabajar con la respuesta JSON recibida
+                //lo mostramos en el text area 2
+                // si el texto recibido es undefined lo omitimos
+
+                //document.querySelector('.text-area2').value = result.salida;
+            })
+            .catch(error => {
+                console.log('Error:', error);
+                // Manejo de errores
+            });
     };
 
 
@@ -141,7 +161,11 @@ export const Home = () => {
 
                         </li>
 
-                        <a class="nav-item nav-link disabled" href="#">Reporte Simbolos</a>
+                        <li class="nav-item">
+                            <button id="openArbol" onClick={getSimbolos} class="btn btn-light" type="button">Reporte Simbolos</button>
+
+                        </li>
+
                     </div>
                 </div>
             </nav>

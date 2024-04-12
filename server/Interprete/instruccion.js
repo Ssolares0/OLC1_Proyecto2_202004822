@@ -19,6 +19,7 @@ const TipoInstruccion ={
     SWITCH: 'SWITCH',
     WHILE: 'WHILE',
     GLOBAL : 'GLOBAL',
+    FOR: 'FOR',
 }
 
 module.exports = {instruccion,TipoInstruccion};

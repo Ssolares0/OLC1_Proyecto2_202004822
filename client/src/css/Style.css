@@ -229,6 +229,7 @@ body {
     padding: 60px;
     color: black; /* Cambia el color del texto según sea necesario */
     color: black; /* Cambia el color del texto */
+	overflow: "scroll"
 }
 .text-area2 {
     width: 45vw; /* Cambia el ancho según sea necesario */
@@ -236,5 +237,6 @@ body {
     padding: 60px;
     color: black; /* Cambia el color del texto según sea necesario */
     color: black; /* Cambia el color del texto */
-    pointer-events: none;
+    
+	overflow: "scroll"
 }

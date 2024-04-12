@@ -48,21 +48,21 @@ class Declaracion extends instruccion {
         } else if (this.expresion != null) {
             let value = this.expresion.interpretar(entorno);
             
-
+            console.log("tipo: "+tipo.toLowerCase()+" expresion: "+this.expresion.tipo)
             if (tipo.toLowerCase() == 'int' && this.expresion.tipo == TipoDato.ENTERO|| 
                 tipo.toLowerCase() == 'double' && this.expresion.tipo == TipoDato.DECIMAL||
                 tipo.toLowerCase() == 'bool' && this.expresion.tipo == TipoDato.BOOL||
                 tipo.toLowerCase() == 'char' && this.expresion.tipo == TipoDato.CHAR||
                 tipo.toLowerCase() == 'string' && this.expresion.tipo == TipoDato.CADENA) {
 
-                //imprimimos los valores
-                console.log("entro a declaracion con expresion");
+                
 
                 let c = entorno.save_variable(id, value, this.expresion.tipo, TipoSimbolo.VARIABLE, this.line, this.column);
                 if (!c) {
                     console.log("Error semantico: la variable " + id + " ya fue declarada anteriormente");
-                    return;
+                    return ;
                 }
+                return "Variable " + id + " declarada correctamente";
                // console.log("id: " + id + " tipo: " + tipo + " valor: " + value);
 
             } else{

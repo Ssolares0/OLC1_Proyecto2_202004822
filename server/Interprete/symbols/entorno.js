@@ -58,13 +58,35 @@ class Entorno {
             return true;
         } else {
             if (this.anterior != null) {
-                return this.anterior.actualizar_variable(nombre,valor);
-            }else{
+                return this.anterior.actualizar_variable(nombre, valor);
+            } else {
                 console.log("No se encontro la variable: " + nombre);
                 return false;
             }
-            
+
         }
+    }
+
+    getEntorno() {
+        let entorno = this;
+        while (entorno != null) {
+            for (const entry of env.variables.entries()) {
+                const [key, value] = entry;
+
+                tmp += `<tr>\n`;
+                tmp += `\t<td>${key}</td>\n`;
+                tmp += `\t<td>${getTipo(value.tipo)}</td>\n`; 
+                tmp += `\t<td>Variable</td>\n`;
+                tmp += `\t<td>${value.valor}</td>\n`;
+                tmp += `\t<td>${value.line}</td>\n`;
+                tmp += `\t<td>${value.column}</td>\n`;
+                tmp += `</tr>\n`;
+            }
+
+
+
+        }
+        return tmp;
     }
 
 }
