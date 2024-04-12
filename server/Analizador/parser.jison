@@ -119,6 +119,7 @@ comentarios "//".* ;
     const Whiles = require('../Interprete/instruccion/Whiles.js');
     const Fors = require('../Interprete/instruccion/Fors.js');
     const Asignacion = require('../Interprete/instruccion/Asignacion.js');
+    const Funciones = require('../Interprete/instruccion/Funciones.js');
 
 %}
 
@@ -157,6 +158,7 @@ instruccion
     | switches {$$=$1;}
     | instrWhile {$$=$1;}
     | instrFor {$$=$1;}
+    | instrFunciones {$$=$1;}
     | sentenControl  PUNTOCOMA {$$=$1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
@@ -223,7 +225,15 @@ for_declaracion
     : declaraVar   {$$=$1;}
     | asignacion   {$$=$1;}
       
-;    
+; 
+
+instrFunciones
+    : tipos VARIABLES PARIZQ listaParametros PARDER LLAIZQ listainstruccion LLADER {$$=new Funciones($2,$4,$7,@1.first_line,@1.first_column);}
+    | tipos VARIABLES PARIZQ PARDER LLAIZQ listainstruccion LLADER {$$=new Funciones($2,[],$6,@1.first_line,@1.first_column);}
+    
+;
+
+   
 asignacion
     : VARIABLES IGUAL expresion  {$$=new Asignacion($1,$3,@1.first_line,@1.first_column);}
 
@@ -261,6 +271,12 @@ tipos
 listaval
     : listaval 'COMA' VARIABLES { $$.push($3);$$=$1}
     | VARIABLES {$$=[$1];}
+;
+
+listaParametros
+    : listavalFunciones 'COMA' tipos VARIABLES { $$.push($3);$$=$1}
+    | tipos VARIABLES {$$=[$1];}
+
 ;
 
 listacasos

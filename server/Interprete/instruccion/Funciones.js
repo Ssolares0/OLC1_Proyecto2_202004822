@@ -14,6 +14,7 @@ class Funciones extends instruccion{
 
     interpretar(entorno){
         
+        
     }
     getNodo(){
         let nodo = new NodoAst("FUNCION");
@@ -27,3 +28,4 @@ class Funciones extends instruccion{
         return nodo;
     }
 }
+module.exports = Funciones;

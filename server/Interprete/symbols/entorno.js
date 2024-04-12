@@ -66,6 +66,16 @@ class Entorno {
 
         }
     }
+    save_funcion(nombre, funcion) {
+        if (this.funciones.has(nombre)) {
+            console.log("Ya existe una funcion con el nombre: " + nombre);
+            return false;
+        } else {
+            this.funciones.set(nombre, funcion);
+            console.log("Se guardo la funcion: " + nombre);
+            return true;
+        }
+    }
 
     getEntorno() {
         let entorno = this;
