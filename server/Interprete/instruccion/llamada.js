@@ -19,6 +19,9 @@ class Llamada extends instruccion{
      
         
         const func = entorno.get_funcion(this.id);
+        let value = "";
+
+       
 
         if(func == null){
             //Errores semanticos
@@ -62,15 +65,28 @@ class Llamada extends instruccion{
 
             }
             //aqui ya podemos invocar a la funcion
-            let nuevoEntorno = new Entorno(TipoInstruccion.FUNCION,entorno);
+            const nuevoEntorno = new Entorno(TipoInstruccion.FUNCION,entorno);
             
             let i =0;
             this.parametros.forEach(parametro => {
                 const valor = parametro.interpretar(entorno);
                 //falta arreglar el tipo
-                nuevoEntorno.save_variable(func.parametros[i].split(",")[0],valor,valor.tipo,TipoSimbolo.VARIABLE,this.fila,this.columna);
+               
+                nuevoEntorno.save_variable(func.parametros[i].split(",")[0],valor,parametro.tipo,TipoSimbolo.VARIABLE,this.fila,this.columna);
                 i++;
             });
+
+            
+            //ver el objeto como json
+            
+           
+
+            func.instr.forEach(instruccion => {
+                value +=instruccion.interpretar(nuevoEntorno);
+                value += "\n"; 
+               
+           });
+           return value;
 
             
             

@@ -39,7 +39,9 @@ class Funciones extends instruccion{
         if (error) {
             return this;
         }
+        
         entorno.save_funcion(this.id, this);
+        return '';
         //imprimir 
     
     }

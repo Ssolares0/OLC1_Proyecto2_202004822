@@ -2,6 +2,7 @@ const { TipoDato } = require('../Expresion.js');
 const symbolo1 = require('./Symbol.js');
 
 
+
 class Entorno {
 
     constructor(nombre, anterior) {
@@ -78,11 +79,13 @@ class Entorno {
     }
 
     get_funcion(nombre) {
-        if (this.funciones.has(nombre)) {
-            return this.funciones.get(nombre);
+        let entorno = this;
+        if (entorno.funciones.has(nombre)) {
+            
+            return entorno.funciones.get(nombre);
         } else {
             if (this.anterior != null) {
-                return this.anterior.get_funcion(nombre);
+                return entorno.anterior.get_funcion(nombre);
             } else {
                 console.log("No se encontro la funcion: " + nombre);
                 return null;
