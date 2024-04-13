@@ -20,6 +20,7 @@ const TipoInstruccion ={
     WHILE: 'WHILE',
     GLOBAL : 'GLOBAL',
     FOR: 'FOR',
+    FUNCION: 'FUNCION',
 }
 
 module.exports = {instruccion,TipoInstruccion};

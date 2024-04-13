@@ -120,6 +120,7 @@ comentarios "//".* ;
     const Fors = require('../Interprete/instruccion/Fors.js');
     const Asignacion = require('../Interprete/instruccion/Asignacion.js');
     const Funciones = require('../Interprete/instruccion/Funciones.js');
+    const Llamada = require('../Interprete/instruccion/llamada.js');
 
 %}
 
@@ -159,6 +160,7 @@ instruccion
     | instrWhile {$$=$1;}
     | instrFor {$$=$1;}
     | instrFunciones {$$=$1;}
+    | llamada PUNTOCOMA {$$=$1;}
     | sentenControl  PUNTOCOMA {$$=$1;}
 	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
@@ -228,12 +230,20 @@ for_declaracion
 ; 
 
 instrFunciones
-    : tipos VARIABLES PARIZQ listaParametros PARDER LLAIZQ listainstruccion LLADER {$$=new Funciones($2,$4,$7,@1.first_line,@1.first_column);}
-    | tipos VARIABLES PARIZQ PARDER LLAIZQ listainstruccion LLADER {$$=new Funciones($2,[],$6,@1.first_line,@1.first_column);}
+    : tipos VARIABLES PARIZQ listaParametros PARDER LLAIZQ listainstruccion LLADER {$$=new Funciones($2,$1,$4,$7,@1.first_line,@1.first_column);}
+    | tipos VARIABLES PARIZQ PARDER LLAIZQ listainstruccion LLADER {$$=new Funciones($2,$1,[],$6,@1.first_line,@1.first_column);}
     
 ;
 
-   
+llamada
+    : VARIABLES PARIZQ llamada_parm PARDER  {$$=new Llamada($1,$3,@1.first_line,@1.first_column);}
+    | VARIABLES PARIZQ PARDER  {$$=new Llamada($1,[],@1.first_line,@1.first_column);}
+;
+
+llamada_parm
+    : llamada_parm 'COMA' expresion  {$$.push($3);$$=$1}
+    | expresion {$$=[$1];}
+;
 asignacion
     : VARIABLES IGUAL expresion  {$$=new Asignacion($1,$3,@1.first_line,@1.first_column);}
 
@@ -274,8 +284,8 @@ listaval
 ;
 
 listaParametros
-    : listavalFunciones 'COMA' tipos VARIABLES { $$.push($3);$$=$1}
-    | tipos VARIABLES {$$=[$1];}
+    : listaParametros 'COMA' tipos VARIABLES { $$.push($4+","+$3);$$=$1}
+    | tipos VARIABLES {$$=[$2+","+$1];}
 
 ;
 

@@ -77,6 +77,21 @@ class Entorno {
         }
     }
 
+    get_funcion(nombre) {
+        if (this.funciones.has(nombre)) {
+            return this.funciones.get(nombre);
+        } else {
+            if (this.anterior != null) {
+                return this.anterior.get_funcion(nombre);
+            } else {
+                console.log("No se encontro la funcion: " + nombre);
+                return null;
+            }
+        }
+    }
+
+   
+
     getEntorno() {
         let entorno = this;
         while (entorno != null) {
