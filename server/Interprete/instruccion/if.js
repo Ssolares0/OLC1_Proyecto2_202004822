@@ -5,7 +5,7 @@ const { NodoAst } = require('../graficar/NodoAst.js');
 
 class If extends instruccion {
     constructor(condicion, instr, siNo,fila, columna) {
-        super(condicion, instr, fila, columna);
+        super(TipoInstruccion.IF,condicion, instr, fila, columna);
         this.condicion = condicion;
         this.instr = instr;
         this.siNo = siNo;
@@ -21,11 +21,17 @@ class If extends instruccion {
             return this;
         }
         if (String(this.condicion.valor).toLowerCase() === "true") {
-            this.instr.forEach(instruccion => {
-                 value +=instruccion.interpretar(entornoIf);
-                 value += "\n"; 
-                
-            });
+
+            for (let i = 0; i < this.instr.length; i++) {
+                let instruccion = this.instr[i];
+                value += instruccion.interpretar(entornoIf);
+                value += "\n";
+                if (instruccion.tipo == TipoInstruccion.BREAK) {
+                    this.tipo= TipoInstruccion.BREAK;
+                    break;
+                }
+            }
+            
             return value;
             //GUARDAMOS ENTORNO
             

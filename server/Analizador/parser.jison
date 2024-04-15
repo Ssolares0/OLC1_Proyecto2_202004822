@@ -29,6 +29,7 @@ comentarios "//".* ;
 "else"                  { return 'ELSE'; }
 "new"                   { return 'NEW'; }
 
+"execute"               { return 'EXECUTE'; }
 "println"               { return 'RPRINTLN'; }
 "cout"                  { return 'RCOUT'; }
 "endl"                  { return 'RENDL'; }
@@ -121,6 +122,7 @@ comentarios "//".* ;
     const Asignacion = require('../Interprete/instruccion/Asignacion.js');
     const Funciones = require('../Interprete/instruccion/Funciones.js');
     const Llamada = require('../Interprete/instruccion/llamada.js');
+    const Execute = require('../Interprete/instruccion/execute.js');
 
 %}
 
@@ -133,6 +135,7 @@ comentarios "//".* ;
 
 
 %right 'NOT'
+%right 'TERNARIO'
 
 // -------> Simbolo Inicial
 %start inicio
@@ -162,7 +165,8 @@ instruccion
     | instrFunciones {$$=$1;}
     | llamada PUNTOCOMA {$$=$1;}
     | sentenControl  PUNTOCOMA {$$=$1;}
-	| error 	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
+    | execute PUNTOCOMA {$$=$1;}
+	| error  PUNTOCOMA	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
 
 print
@@ -172,10 +176,16 @@ print
 
     
 ;
+
+execute 
+    : EXECUTE VARIABLES PARIZQ llamada_parm PARDER  {$$=new Execute($2,$4,@1.first_line,@1.first_column);}
+    | EXECUTE VARIABLES PARIZQ PARDER  {$$=new Execute($2,[],@1.first_line,@1.first_column);}
+
+;
 declaraVar
     : tipos listaval IGUAL expresion  {$$=new Declaracion($2,$1,$4,@1.first_line,@1.first_column);}
     | tipos listaval  {$$=new Declaracion($2,$1,null,@1.first_line,@1.first_column);}
-    | tipos listaval IGUAL instrTernario  {$$=new Declaracion($2,$1,$4,@1.first_line,@1.first_column);}
+   
     
 ;
 
@@ -191,9 +201,6 @@ incanddec
 
 ;
 
-instrTernario
-    : expresion TERNARIO datos DOSPUNTOS datos {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column);}
-;
 
 instrIf
     : IF PARIZQ expresion PARDER LLAIZQ listainstruccion LLADER instrElse {$$=new If($3,$6,$8,@1.first_line,@1.first_column);}
@@ -265,6 +272,7 @@ expresion
     | expresion AND expresion {$$=new Logicos($1,$3,$2,@1.first_line,@1.first_column);}
     | expresion OR expresion {$$=new Logicos($1,$3,$2,@1.first_line,@1.first_column);}
     | NOT expresion {$$=new Logicos($2,$2,$1,@1.first_line,@1.first_column);}
+    | expresion TERNARIO datos DOSPUNTOS datos {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column);}
     | datos {$$=$1;}
 
     ;

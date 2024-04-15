@@ -27,10 +27,21 @@ class Fors extends instruccion{
         }
        
         while(this.condicion.valor){
-            this.instr.forEach(instruccion => {
-                value +=instruccion.interpretar(entornoFor);
+            let result = TipoInstruccion.FOR;
+            for (let i =0;i<this.instr.length;i++){
+                let instruccion = this.instr[i];
+                value += instruccion.interpretar(entornoFor);
                 value += "\n";
-            });
+                if(instruccion.tipo ==  TipoInstruccion.BREAK){
+                    result = TipoInstruccion.BREAK;
+                    break;
+                }
+            }
+            if (result == TipoInstruccion.BREAK){
+                
+                break;
+            }
+            
             this.incremento.interpretar(entornoFor);
             let cond = this.condicion.interpretar(entornoFor);
             if(this.condicion.tipo != 'BOOL'){
@@ -44,6 +55,7 @@ class Fors extends instruccion{
             }
             
         }
+        
         return value;
         
 

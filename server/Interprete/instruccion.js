@@ -21,6 +21,7 @@ const TipoInstruccion ={
     GLOBAL : 'GLOBAL',
     FOR: 'FOR',
     FUNCION: 'FUNCION',
+    BREAK: 'BREAK',
 }
 
 module.exports = {instruccion,TipoInstruccion};

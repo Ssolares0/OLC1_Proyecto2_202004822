@@ -9,7 +9,7 @@ const Breaks = require('./breaks.js');
 
 class Whiles extends instruccion{
     constructor(condicion,instr,fila,columna){
-        super(fila,columna);
+        super(TipoInstruccion.WHILE,fila,columna);
         this.condicion = condicion;
         this.instr = instr;
     }
@@ -24,10 +24,23 @@ class Whiles extends instruccion{
         }
         console.log(this.condicion.valor)
         while(this.condicion.valor){
-            this.instr.forEach(instruccion => {
-                value +=instruccion.interpretar(entornoWhile);
+            let result = TipoInstruccion.WHILE;
+            for (let i =0;i<this.instr.length;i++){
+                let instruccion = this.instr[i];
+
+                
+                value += instruccion.interpretar(entornoWhile);
                 value += "\n";
-            });
+
+                if(instruccion.tipo ==  TipoInstruccion.BREAK){
+                    result = TipoInstruccion.BREAK;
+                    break;
+                }
+
+            }
+            if (result == TipoInstruccion.BREAK){
+                break;
+            }
             let cond = this.condicion.interpretar(entornoWhile);
             if(this.condicion.tipo != 'BOOL'){
                //Errores semanticos
@@ -36,6 +49,8 @@ class Whiles extends instruccion{
                return this.valor;
             }
             if(this.condicion.valor == false){
+                break;
+            } else if (result == TipoInstruccion.BREAK){
                 break;
             }
             
