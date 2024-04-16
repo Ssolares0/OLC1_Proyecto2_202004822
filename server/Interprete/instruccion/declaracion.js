@@ -93,15 +93,7 @@ class Declaracion extends instruccion {
             nodo.agregarHijoAST(this.expresion.getNodo());
         }
 
-        
-       
-        
-        
-        //nodo.agregarHijoAST(this.tipo.getNodo());
-        // nodo.agregarHijoAST(this.id.getNodo());
-        
-        
-        
+    
         return nodo;
     }
 }

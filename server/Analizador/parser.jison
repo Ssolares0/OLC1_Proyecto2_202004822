@@ -6,7 +6,7 @@
 decimal [0-9]+(\.)[0-9]+;   
 entero  [0-9]+;
 caracter  (\‘|\')(.{1,2})(\’|\');
-cadena  (\"|\“)(\\.|[^\"])*(\"|\”);
+cadena  [\"][^\n\"]*[\"];
 bool  "true"|"false";
 variables  [a-zA-Z_]+\w*;
 comentarios "//".* ;
@@ -29,6 +29,7 @@ comentarios "//".* ;
 "else"                  { return 'ELSE'; }
 "new"                   { return 'NEW'; }
 
+"void"                  { return 'VOID'; }
 "execute"               { return 'EXECUTE'; }
 "println"               { return 'RPRINTLN'; }
 "cout"                  { return 'RCOUT'; }
@@ -38,6 +39,7 @@ comentarios "//".* ;
 "default"               { return 'DEFAULT'; }
 "break"                 { return 'BREAK'; }
 "continue"              { return 'CONTINUE'; }
+"return"                { return 'RETURN'; }
 "while"                 { return 'WHILE';}
 "for"                   { return 'FOR';}
 
@@ -117,12 +119,16 @@ comentarios "//".* ;
     const IncreDecre = require('../Interprete/expresion/IncreDecre.js');
     const Switch = require('../Interprete/instruccion/Switch.js');
     const Breaks = require('../Interprete/instruccion/breaks.js');
+    const Continues = require('../Interprete/instruccion/continues.js');
+    const Return = require('../Interprete/instruccion/Return.js');
     const Whiles = require('../Interprete/instruccion/Whiles.js');
     const Fors = require('../Interprete/instruccion/Fors.js');
     const Asignacion = require('../Interprete/instruccion/Asignacion.js');
     const Funciones = require('../Interprete/instruccion/Funciones.js');
+    const Metodos = require('../Interprete/instruccion/Metodos.js');
     const Llamada = require('../Interprete/instruccion/llamada.js');
     const Execute = require('../Interprete/instruccion/execute.js');
+    
 
 %}
 
@@ -159,14 +165,16 @@ instruccion
     | asignacion  PUNTOCOMA {$$=$1;}
     | incanddec PUNTOCOMA {$$=$1;}
     | instrIf {$$=$1;}
+    | returns PUNTOCOMA {$$=$1;}
     | switches {$$=$1;}
     | instrWhile {$$=$1;}
     | instrFor {$$=$1;}
     | instrFunciones {$$=$1;}
+    | instrMetodos {$$=$1;}
     | llamada PUNTOCOMA {$$=$1;}
     | sentenControl  PUNTOCOMA {$$=$1;}
     | execute PUNTOCOMA {$$=$1;}
-	| error  PUNTOCOMA	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
+	| error  	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
 ;
 
 print
@@ -242,6 +250,16 @@ instrFunciones
     
 ;
 
+instrMetodos
+    : VOID VARIABLES PARIZQ listaParametros PARDER LLAIZQ listainstruccion LLADER {$$=new Metodos($2,$1,$4,$7,@1.first_line,@1.first_column);}
+    | VOID VARIABLES PARIZQ PARDER LLAIZQ listainstruccion LLADER {$$=new Metodos($2,$1,[],$6,@1.first_line,@1.first_column);}
+
+;
+
+returns 
+    : RETURN expresion  {$$=new Return($2,@1.first_line,@1.first_column);}
+    | RETURN  {$$=new Return(null,@1.first_line,@1.first_column);}
+;
 llamada
     : VARIABLES PARIZQ llamada_parm PARDER  {$$=new Llamada($1,$3,@1.first_line,@1.first_column);}
     | VARIABLES PARIZQ PARDER  {$$=new Llamada($1,[],@1.first_line,@1.first_column);}
@@ -272,6 +290,7 @@ expresion
     | expresion AND expresion {$$=new Logicos($1,$3,$2,@1.first_line,@1.first_column);}
     | expresion OR expresion {$$=new Logicos($1,$3,$2,@1.first_line,@1.first_column);}
     | NOT expresion {$$=new Logicos($2,$2,$1,@1.first_line,@1.first_column);}
+    | llamada {$$=$1;}
     | expresion TERNARIO datos DOSPUNTOS datos {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column);}
     | datos {$$=$1;}
 
@@ -292,7 +311,7 @@ listaval
 ;
 
 listaParametros
-    : listaParametros 'COMA' tipos VARIABLES { $$.push($4+","+$3);$$=$1}
+    : listaParametros 'COMA' tipos VARIABLES {$$.push($4 + "," + $3); $$ = $1}
     | tipos VARIABLES {$$=[$2+","+$1];}
 
 ;
@@ -310,7 +329,7 @@ caso
 ;
 sentenControl
     :   BREAK  {$$= new Breaks(@1.first_line,@1.first_column);}
-    |   CONTINUE  {$$='continue';}
+    |   CONTINUE  {$$= new Continues(@1.first_line,@1.first_column);}
 
 ;
 

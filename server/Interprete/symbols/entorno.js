@@ -10,17 +10,20 @@ class Entorno {
         this.anterior = anterior;
         this.variables = new Map();
         this.funciones = new Map();
+        this.metodos = new Map();
 
     }
 
     save_variable(nombre, valor, tipo, typedata, line, column) {
 
-        for (let i = 0; i < nombre.length; i++) {
-            if (this.variables.has(nombre[i])) {
+        let separador = nombre.toString().split(',');
+        
+        for ( const i in separador) {
+            if (this.variables.has(separador[i])) {
                 return false;
             } else {
-                this.variables.set(nombre[i], new symbolo1.Symbol(nombre[i], valor, tipo, typedata, line, column));
-                console.log("Se guardo la variable: " + nombre[i] + " con valor: " + valor);
+                this.variables.set(separador[i], new symbolo1.Symbol(separador[i], valor, tipo, typedata, line, column));
+                console.log("Se guardo la variable: " + separador[i] + " con valor: " + valor);
 
             }
         }
@@ -36,6 +39,7 @@ class Entorno {
         let valor = null;
         let tipo = "ERROR";
 
+        
         if (this.variables.has(nombre)) {
             //console.log("Se encontro la variable: " + this.variables.get(nombre).valor);
             valor = this.variables.get(nombre).valor;
@@ -80,17 +84,50 @@ class Entorno {
 
     get_funcion(nombre) {
         let entorno = this;
-        if (entorno.funciones.has(nombre)) {
+        while (entorno != null){
+            if (entorno.funciones.has(nombre)) {
             
-            return entorno.funciones.get(nombre);
-        } else {
-            if (this.anterior != null) {
-                return entorno.anterior.get_funcion(nombre);
+                return entorno.funciones.get(nombre);
             } else {
-                console.log("No se encontro la funcion: " + nombre);
-                return null;
+                if (this.anterior != null) {
+                    return entorno.anterior.get_funcion(nombre);
+                } else {
+                    console.log("No se encontro la funcion: " + nombre);
+                    return null;
+                }
             }
+
         }
+        
+    }
+
+    save_metodo(nombre, metodo) {
+        if (this.metodos.has(nombre)) {
+            console.log("Ya existe un metodo con el nombre: " + nombre);
+            return false;
+        } else {
+            this.metodos.set(nombre, metodo);
+            console.log("Se guardo el metodo: " + nombre);
+            return true;
+        }
+    }
+    get_metodo(nombre) {
+        let entorno = this;
+
+        while(entorno != null){
+            if (entorno.metodos.has(nombre)) {
+                return entorno.metodos.get(nombre);
+            } else {
+                if (this.anterior != null) {
+                    return entorno.anterior.get_metodo(nombre);
+                } else {
+                    console.log("No se encontro el metodo: " + nombre);
+                    return null;
+                }
+            }
+
+        }
+        
     }
 
    

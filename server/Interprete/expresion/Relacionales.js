@@ -61,7 +61,11 @@ class Relacionales extends Expresion {
     //creamos el nodo del arbol
     getNodo() {
         let nodo = new NodoAst("Relacional");
+        console.log(this.op1.getNodo());
         nodo.agregarHijoAST(this.op1.getNodo());
+
+    
+        
         nodo.agregarHijo(this.operador);
         nodo.agregarHijoAST(this.op2.getNodo());
         return nodo;

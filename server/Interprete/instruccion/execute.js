@@ -17,20 +17,20 @@ class Execute extends instruccion{
 
     interpretar(entorno){
      
-        
         const func = entorno.get_funcion(this.id);
+        const metodo = entorno.get_metodo(this.id);
         let value = "";
 
        
 
-        if(func == null){
+        if(func == null && metodo == null){
             //Errores semanticos
             this.tipo = TipoDato.ERROR;
             console.log("Error Semantico: La funcion no existe");
             return "Error Semantico: La funcion no existe";
         }
-
-        if(func != null){
+        
+        if(func != null && metodo == null){
             if(func.parametros.length != this.parametros.length){
                 //Errores semanticos
                 this.tipo = TipoDato.ERROR;
@@ -48,7 +48,7 @@ class Execute extends instruccion{
 
             for (let i = 0; i < func.parametros.length; i++) {
                 const elemento = func.parametros[i].split(",")[1];
-                console.log("elemento: "+elemento+" array: "+array[i]);
+         
                 if(elemento.toLowerCase()=="int" && array[i] == TipoDato.ENTERO|| 
                     elemento.toLowerCase()=="double" && array[i] == TipoDato.DECIMAL|| 
                     elemento.toLowerCase()=="string" && array[i] == TipoDato.CADENA|| 
@@ -69,10 +69,11 @@ class Execute extends instruccion{
             
             let i =0;
             this.parametros.forEach(parametro => {
+                
                 const valor = parametro.interpretar(entorno);
                 //falta arreglar el tipo
-               
-                nuevoEntorno.save_variable(func.parametros[i].split(",")[0],valor,parametro.tipo,TipoSimbolo.VARIABLE,this.fila,this.columna);
+                
+                nuevoEntorno.save_variable(func.parametros[i].split(",")[0].toString(),valor,parametro.tipo,TipoSimbolo.VARIABLE,this.fila,this.columna);
                 i++;
             });
 
@@ -91,6 +92,64 @@ class Execute extends instruccion{
             
             
 
+        }
+        if(func == null && metodo != null){
+            if(metodo.parametros.length != this.parametros.length){
+                //Errores semanticos
+                this.tipo = TipoDato.ERROR;
+                console.log("Error Semantico: La cantidad de parametros no coincide");
+                return "Error Semantico: La cantidad de parametros no coincide";
+            }
+
+            //almacenamos los tipos de la expresion y guardamos en un array
+            let array = [];
+            this.parametros.forEach(parametro => {
+                array.push(parametro.tipo);
+            });
+
+            //recorrer los parametros
+
+            for (let i = 0; i < metodo.parametros.length; i++) {
+                const elemento = metodo.parametros[i].split(",")[1];
+                console.log("elemento: "+elemento+" array: "+array[i]);
+                if(elemento.toLowerCase()=="int" && array[i] == TipoDato.ENTERO|| 
+                    elemento.toLowerCase()=="double" && array[i] == TipoDato.DECIMAL|| 
+                    elemento.toLowerCase()=="string" && array[i] == TipoDato.CADENA|| 
+                    elemento.toLowerCase()=="char" && array[i] == TipoDato.CHAR|| 
+                    elemento.toLowerCase()=="boolean" && array[i] == TipoDato.BOOL){
+                    
+                } else{
+                    //Errores semanticos
+                    this.tipo = TipoDato.ERROR;
+                    console.log("Error Semantico: El tipo de parametro no coincide");
+                    return "Error Semantico: El tipo de parametro no coincide, en la posicion: "+i+" de la funcion: "+this.id+" se esperaba un tipo: "+elemento+" y se recibio un tipo: "+array[i];
+
+                }
+
+            }
+            //aqui ya podemos invocar a la funcion
+            const nuevoEntorno = new Entorno(TipoInstruccion.METODO,entorno);
+            
+            let i =0;
+            this.parametros.forEach(parametro => {
+                console.log("parametro: "+parametro);
+                const valor = parametro.interpretar(entorno);
+                //falta arreglar el tipo
+               
+                nuevoEntorno.save_variable(metodo.parametros[i].split(",")[0],valor,parametro.tipo,TipoSimbolo.VARIABLE,this.fila,this.columna);
+                i++;
+            });
+
+            
+            //ver el objeto como json
+            
+           
+
+            metodo.instr.forEach(instruccion => {
+                value +=instruccion.interpretar(nuevoEntorno);
+                value += "\n";
+            });
+            return value;
         }
     }
 

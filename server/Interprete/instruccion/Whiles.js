@@ -35,12 +35,19 @@ class Whiles extends instruccion{
                 if(instruccion.tipo ==  TipoInstruccion.BREAK){
                     result = TipoInstruccion.BREAK;
                     break;
+                } else if (instruccion.tipo == TipoInstruccion.CONTINUE) {
+                    result = TipoInstruccion.CONTINUE;
+                    continue;
                 }
 
             }
             if (result == TipoInstruccion.BREAK){
                 break;
+            } else if (result == TipoInstruccion.CONTINUE) {
+                
+                continue;
             }
+            
             let cond = this.condicion.interpretar(entornoWhile);
             if(this.condicion.tipo != 'BOOL'){
                //Errores semanticos

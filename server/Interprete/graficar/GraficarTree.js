@@ -30,7 +30,8 @@ module.exports.graficarArbol = graficarArbol;
 function graphAST(texto, padre) {
     for (let hijo of padre.listaHijos) {
         let nombreHijo = `n${contador}`;
-        cuerpo += `${nombreHijo}[label="${hijo.valor.replace('"', '\\"')}"];
+        let valorHijo = hijo.valor.replace(/"/g, '\\"'); // Escapar comillas dentro del valor
+        cuerpo += `${nombreHijo}[label="${valorHijo}"];
       ${texto} -> ${nombreHijo};\n`;
         contador++;
         graphAST(nombreHijo, hijo);

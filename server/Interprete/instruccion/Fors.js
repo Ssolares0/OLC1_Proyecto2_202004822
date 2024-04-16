@@ -35,11 +35,17 @@ class Fors extends instruccion{
                 if(instruccion.tipo ==  TipoInstruccion.BREAK){
                     result = TipoInstruccion.BREAK;
                     break;
+                } else if (instruccion.tipo == TipoInstruccion.CONTINUE) {
+                    result = TipoInstruccion.CONTINUE;
+                    continue;
                 }
             }
             if (result == TipoInstruccion.BREAK){
                 
                 break;
+            } else if (result == TipoInstruccion.CONTINUE) {
+                
+                continue;
             }
             
             this.incremento.interpretar(entornoFor);

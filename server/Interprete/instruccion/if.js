@@ -5,7 +5,7 @@ const { NodoAst } = require('../graficar/NodoAst.js');
 
 class If extends instruccion {
     constructor(condicion, instr, siNo,fila, columna) {
-        super(TipoInstruccion.IF,condicion, instr, fila, columna);
+        super(condicion, instr, fila, columna);
         this.condicion = condicion;
         this.instr = instr;
         this.siNo = siNo;
@@ -29,6 +29,9 @@ class If extends instruccion {
                 if (instruccion.tipo == TipoInstruccion.BREAK) {
                     this.tipo= TipoInstruccion.BREAK;
                     break;
+                }else if (instruccion.tipo == TipoInstruccion.CONTINUE) {
+                    this.tipo= TipoInstruccion.CONTINUE;
+                    continue;
                 }
             }
             
@@ -62,7 +65,7 @@ class If extends instruccion {
             
             nodo.agregarHijo("println");
             nodo.agregarHijo("(");
-            //nodo.agregarHijoAST(instruccion.getNodo());
+            nodo.agregarHijoAST(instruccion.getNodo());
             nodo.agregarHijo(")");
             nodo.agregarHijo(";");
         });
