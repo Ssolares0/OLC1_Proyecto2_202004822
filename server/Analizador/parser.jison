@@ -98,7 +98,11 @@ comentarios "//".* ;
 
 // -----> FIN DE CADENA Y ERRORES
 <<EOF>>               return 'EOF';
-.  { console.error('Error léxico: \"' + yytext + '\", linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column);  }
+.  { //let e = Error.addError( new Error(yytext, "Error Lexico",yylloc.first_line, yylloc.first_column)); 
+    console.error('Error léxico: ' + yytext + ',  linea: ' + yylloc.first_line + ', columna: ' + yylloc.first_column);
+    
+    sng.addError(new Error("Error Léxico",yytext,yylloc.first_line, yylloc.first_column));
+    }
 
 
 /lex
@@ -113,6 +117,7 @@ comentarios "//".* ;
     const Logicos =require('../Interprete/expresion/Logicos.js');
     const Relacionales =require('../Interprete/expresion/Relacionales.js');
     const Declaracion =require('../Interprete/instruccion/declaracion.js');
+    const DecVec1D_tipo1 =require('../Interprete/instruccion/decVec1D_tipo1.js');
     const If =require('../Interprete/instruccion/if.js');
     const Ternario = require('../Interprete/expresion/Ternario.js');
     const Vars = require('../Interprete/expresion/Vars.js');
@@ -128,6 +133,8 @@ comentarios "//".* ;
     const Metodos = require('../Interprete/instruccion/Metodos.js');
     const Llamada = require('../Interprete/instruccion/llamada.js');
     const Execute = require('../Interprete/instruccion/execute.js');
+    const Error = require('../Interprete/errores/error.js');
+    const sng = require('../Interprete/singleton/Manager.js');
     
 
 %}
@@ -136,12 +143,12 @@ comentarios "//".* ;
 %left 'AND' 
 %left 'REL_IGUAL' 'DIFERENTE' 'MENOR' 'MENORIGUAL' 'MAYOR'  'MAYORIGUAL'
 %left 'MAS' 'MENOS'
-%left 'DIV' 'POR'
-%left 'POTENCIA' 'MODULO'
+%left 'DIV' 'POR' 'MODULO'
+%nonassoc 'POTENCIA' 
 
 
 %right 'NOT'
-%right 'TERNARIO'
+%left 'TERNARIO'
 
 // -------> Simbolo Inicial
 %start inicio
@@ -161,7 +168,7 @@ listainstruccion
 instruccion
 	: print PUNTOCOMA {$$=$1;}
     | declaraVar PUNTOCOMA {$$=$1;}
-    | declaraVect PUNTOCOMA {$$=$1;}
+    | declaraVect1D_1 PUNTOCOMA {$$=$1;}
     | asignacion  PUNTOCOMA {$$=$1;}
     | incanddec PUNTOCOMA {$$=$1;}
     | instrIf {$$=$1;}
@@ -174,7 +181,11 @@ instruccion
     | llamada PUNTOCOMA {$$=$1;}
     | sentenControl  PUNTOCOMA {$$=$1;}
     | execute PUNTOCOMA {$$=$1;}
-	| error  	{console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);}
+	| error  'PUNTOCOMA' {
+        console.error('Error sintáctico: ' + yytext + ',  linea: ' + this._$.first_line + ', columna: ' + this._$.first_column);
+        
+        sng.addError(new Error("Error sintáctico:", yytext,this._$.first_line, this._$.first_column));
+        }
 ;
 
 print
@@ -197,9 +208,9 @@ declaraVar
     
 ;
 
-declaraVect
-    : tipos listaval CORCHIZQ CORCHDER IGUAL NEW tipos CORCHIZQ datos CORCHDER  {$$=new Declaracion($2,$1,$9,$7,$4,@1.first_line,@1.first_column);}
-    | tipos listaval CORCHIZQ CORCHDER CORCHIZQ CORCHDER IGUAL NEW tipos CORCHIZQ datos CORCHDER CORCHIZQ datos CORCHDER  {$$=new Declaracion($2,$1,null,null,@1.first_line,@1.first_column);}
+declaraVect1D_1
+    : tipos listaval CORCHIZQ CORCHDER IGUAL NEW tipos CORCHIZQ datos CORCHDER  {$$=new DecVec1D_tipo1($1,$2,$7,$9,@1.first_line,@1.first_column);}
+    
 
 ;
 incanddec
@@ -291,7 +302,7 @@ expresion
     | expresion OR expresion {$$=new Logicos($1,$3,$2,@1.first_line,@1.first_column);}
     | NOT expresion {$$=new Logicos($2,$2,$1,@1.first_line,@1.first_column);}
     | llamada {$$=$1;}
-    | expresion TERNARIO datos DOSPUNTOS datos {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column);}
+    | expresion TERNARIO expresion DOSPUNTOS expresion {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column); }
     | datos {$$=$1;}
 
     ;

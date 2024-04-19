@@ -42,6 +42,7 @@ class Relacionales extends Expresion {
                 case ">":
                     this.tipo = TipoDato.BOOL;
                     this.valor = op1 > op2;
+                    console.log(this.valor)
                     return this.valor;
                 case "<":
                     this.tipo = TipoDato.BOOL;
@@ -61,7 +62,7 @@ class Relacionales extends Expresion {
     //creamos el nodo del arbol
     getNodo() {
         let nodo = new NodoAst("Relacional");
-        console.log(this.op1.getNodo());
+      
         nodo.agregarHijoAST(this.op1.getNodo());
 
     

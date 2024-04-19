@@ -12,7 +12,7 @@ class Symbol {
     }
 }   
 
-const TipoSimbolo ={
+const TipoSimbolo = {
     VARIABLE: 'VARIABLE',
     ARREGLO : 'ARREGLO',
     FUNCION : 'FUNCION',

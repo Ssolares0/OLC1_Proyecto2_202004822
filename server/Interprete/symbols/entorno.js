@@ -9,6 +9,7 @@ class Entorno {
         this.nombre = nombre;
         this.anterior = anterior;
         this.variables = new Map();
+        this.arrays = new Map();
         this.funciones = new Map();
         this.metodos = new Map();
 
@@ -128,6 +129,48 @@ class Entorno {
 
         }
         
+    }
+
+    save_array(id,vector,tipo,typedata,line,column){
+        let separador = id.toString().split(',');
+        for ( const i in separador) {
+            if (this.arrays.has(separador[i])) {
+                return false;
+            } else {
+                //console.log("Se guardo el array: " + separador[i] + " con valor: " + new Array(vector));
+                //agregar valores al array
+                this.arrays.set(separador[i], new symbolo1.Symbol(separador[i], new Array(vector), tipo, typedata, this.line, this.column));
+                console.log("Se guardo el array: " + separador[i]);
+            }
+        }
+        return true;
+
+        
+
+    }
+    get_array(id){
+        let valor = null;
+        let tipo = "ERROR";
+        let idnew = id;
+
+        console.log("id: " + id);
+
+        
+        if (this.arrays.has(idnew)) {
+            
+            
+            valor = this.arrays.get(idnew).valor;
+            tipo = this.arrays.get(idnew).tipo;
+
+            return { valorr: valor, tipoo: tipo };
+        } else {
+            // Si no se encuentra la variable en el entorno actual, buscar en el entorno anterior
+            if (this.anterior != null) {
+                return this.anterior.get_array(id);
+            } else {
+                return { valorr: valor, tipoo: tipo };
+            }
+        }
     }
 
    

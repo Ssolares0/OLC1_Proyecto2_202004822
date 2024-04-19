@@ -48,7 +48,7 @@ class Declaracion extends instruccion {
         } else if (this.expresion != null) {
             let value = this.expresion.interpretar(entorno);
             
-            console.log("tipo: "+tipo.toLowerCase()+" expresion: "+this.expresion.tipo)
+           
             if (tipo.toLowerCase() == 'int' && this.expresion.tipo == TipoDato.ENTERO|| 
                 tipo.toLowerCase() == 'double' && this.expresion.tipo == TipoDato.DECIMAL||
                 tipo.toLowerCase() == 'bool' && this.expresion.tipo == TipoDato.BOOL||
@@ -56,7 +56,7 @@ class Declaracion extends instruccion {
                 tipo.toLowerCase() == 'string' && this.expresion.tipo == TipoDato.CADENA) {
 
                 
-
+                
                 let c = entorno.save_variable(id, value, this.expresion.tipo, TipoSimbolo.VARIABLE, this.line, this.column);
                 if (!c) {
                     console.log("Error semantico: la variable " + id + " ya fue declarada anteriormente");

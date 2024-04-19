@@ -22,6 +22,7 @@ class Aritmetica extends Expresion {
 
         let valorizq = this.val1.interpretar(entorno);
         let valorder = this.val2.interpretar(entorno);
+        
         if (this.operador == '+') {
             //entero lado izquierdo
             if (this.val1.tipo == TipoDato.ENTERO && this.val2.tipo == TipoDato.ENTERO) {
@@ -29,6 +30,7 @@ class Aritmetica extends Expresion {
 
 
                 this.valor = valorizq + valorder;
+                
                 return Number(this.valor);
             } else if (this.val1.tipo == TipoDato.ENTERO && this.val2.tipo == TipoDato.DECIMAL || this.val1.tipo == TipoDato.DECIMAL && this.val2.tipo == TipoDato.ENTERO) {
                 this.tipo = TipoDato.DECIMAL;

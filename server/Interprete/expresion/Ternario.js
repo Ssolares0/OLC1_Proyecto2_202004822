@@ -14,7 +14,8 @@ class Ternario extends Expresion {
 
     interpretar(entorno){
         let cond = this.condicion.interpretar(entorno);
-        let value = null;
+        console.log("condicion: "+cond);
+      
        
         if(this.condicion.tipo != TipoDato.BOOL){
             console.log("Error semantico: la condicion no es booleana");
@@ -23,12 +24,12 @@ class Ternario extends Expresion {
         }if(cond){
             
             this.tipo = this.exp1.tipo;
-            value= this.exp1.interpretar(entorno);
+            let value= this.exp1.interpretar(entorno);
            
             return value
         }else{
             this.tipo = this.exp2.tipo;
-            value = this.exp2.interpretar(entorno);
+            let value = this.exp2.interpretar(entorno);
             return value;
         }
     }

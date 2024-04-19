@@ -9,15 +9,21 @@ class Vars extends Expresion{
     }
 
     interpretar(entorno){
-        
+       
         let valor = entorno.get_variable(this.id);
 
+        if (valor.tipoo == "ERROR") {
+            valor = entorno.get_array(this.id);
+            
+        }
+
+ 
         //obtenemos los valores del diccionario
         let type = valor.tipoo;
         let value = valor.valorr;
 
         if(value == null){
-            console.log("No se encuentra la variable "+this.id);
+            console.log("No se encuentra la variable o vector "+this.id);
             this.tipo = "ERROR";
             return value;
         }
@@ -26,7 +32,8 @@ class Vars extends Expresion{
     }
 
     getNodo(){
-        let nodo = new NodoAst("VARIABLE");
+       let nodo = new NodoAst("VARIABLE");
+         nodo.agregarHijo(this.id.toString());
        return nodo;
     }
 

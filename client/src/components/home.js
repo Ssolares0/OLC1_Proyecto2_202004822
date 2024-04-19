@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 //import { ReactDOM } from 'react-dom';
 
 
-
+let Rerrores = '';
 export const Home = () => {
     const [entrada, setData] = useState('');
 
@@ -100,6 +100,44 @@ export const Home = () => {
 
     };
 
+ 
+         const getErrores = async (e) => {
+            e.preventDefault();
+            try {
+                const response = await fetch('http://localhost:4000/errores', {
+                    method: 'GET'
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                const result = await response.json();
+    
+                if (result.salida) {
+                    const blob = new Blob([result.salida], { type: 'text/html' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    document.body.appendChild(a);
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'errores.html';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    console.log("Archivo descargado exitosamente.");
+                } else {
+                    console.log("No se recibió HTML válido para descargar.");
+                }
+    
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+   
+    
+
+    
     const getSimbolos = async (e) => {
         e.preventDefault();
         await fetch('http://localhost:4000/simbolos', {
@@ -154,7 +192,9 @@ export const Home = () => {
                             <button id="compilarBtn" onClick={handleSubmit} class="btn btn-light" type="button">Ejecutar entrada</button>
 
                         </li>
-                        <a class="nav-item nav-link" >Reporte Errores</a>
+                        <li class="nav-item " >
+                        <button id="descargarHTML" onClick={getErrores} class="btn btn-light" type="button">Reporte Errores</button>
+                        </li>
 
                         <li class="nav-item">
                             <button id="openArbol" onClick={openArbolAst} class="btn btn-light" type="button">Reporte Arbol</button>
@@ -165,6 +205,9 @@ export const Home = () => {
                             <button id="openArbol" onClick={getSimbolos} class="btn btn-light" type="button">Reporte Simbolos</button>
 
                         </li>
+
+                       
+
 
                     </div>
                 </div>
@@ -184,6 +227,7 @@ export const Home = () => {
                     <textarea class="text-area2" placeholder="Salida" ></textarea>
 
                 </form>
+                
 
             </div>
 

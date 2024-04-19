@@ -7,18 +7,24 @@ const { TipoDato } = require('../Expresion.js');
 
 class Return extends instruccion{
     constructor(exp,fila,columna){
-        super(TipoInstruccion.RETURN,fila,columna);
+        super(fila,columna);
         this.exp = exp;
+        
     }
 
     interpretar(entorno){
-
-        let value = this.exp.interpretar(entorno);
+        
+        let value ="";
+        
+        if(this.exp != null){
+            value = this.exp.interpretar(entorno);
+        }
         if(this.exp.tipo == TipoDato.ERROR){
             console.log("Error semantico: no se pueden retornar errores");
             return "Error semantico: no se pueden retornar errores, linea: "+this.fila+" columna: "+this.columna;
         }
         
+       
         return value;
     }
 

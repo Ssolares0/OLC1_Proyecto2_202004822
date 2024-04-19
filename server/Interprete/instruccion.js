@@ -24,6 +24,7 @@ const TipoInstruccion ={
     METODO: 'METODO',
     BREAK: 'BREAK',
     CONTINUE: 'CONTINUE',
+    RETURN: 'RETURN',
 }
 
 module.exports = {instruccion,TipoInstruccion};

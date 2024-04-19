@@ -4,6 +4,7 @@ const {instruccion,TipoInstruccion} = require('../Interprete/instruccion.js');
 const {NodoAst} = require('../Interprete/graficar/NodoAst.js');
 const {graficarArbol} = require('../Interprete/graficar/GraficarTree.js');
 const {Entorno} = require('../Interprete/symbols/entorno.js');
+const sng = require('../Interprete/singleton/Manager.js');
 const index = (req, res) => {
     res.status(200).json({message: "Funcionando"})
 }
@@ -11,13 +12,18 @@ const index = (req, res) => {
 //funcion que nos permite analizar la entrada
 const analizar = (req, res) => {
     const {entrada} = req.body; // se obtiene informacion del body
+    //borrar errores
+    sng.clearError();
     let result = analizador.parse(entrada); //mandamos a analizar la entrada
+    let init = new NodoAst("INICIO");
+    let instrucciones = new NodoAst("INSTRUCCIONES");
     let regreso = "";
-    //console.log(result);
+
+    
+    
 
     try{
-        let init = new NodoAst("INICIO");
-        let instrucciones = new NodoAst("INSTRUCCIONES");
+        
         let entornoglobal = new Entorno(TipoInstruccion.GLOBAL,null);
         
         result.forEach(instruccion => {
@@ -26,14 +32,33 @@ const analizar = (req, res) => {
 
             instrucciones.agregarHijoAST(instruccion.getNodo());
         });
-        init.agregarHijoAST(instrucciones);
-        respuesta = graficarArbol(init);
+        
 
     } catch (error) {
-        console.log("Hubo un Error al mandar la entrada a interpretar",error);
+        console.log("Hubo un Error al mandar la entrada a interpretar");
+        sng.addError(error);
     }
+    init.agregarHijoAST(instrucciones);
+    respuesta = graficarArbol(init);
     
     res.status(200).json({message: "Funcion analizar",salida:regreso}) //respuesta
+}
+
+const errores = (req, res) => {
+
+    try{
+        
+        
+        let html = `
+        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+        ${sng.getError()}
+        </div>
+        `;
+        //console.log(html);
+        res.status(200).json({message: "Funcion Reporte errores",salida:html})
+    } catch{
+        console.log("Hubo un Error al ver errores");
+    }
 }
 
 const simbolos = (req, res) => {
@@ -53,5 +78,6 @@ const simbolos = (req, res) => {
 module.exports = {
     index,
     analizar,
+    errores,
     simbolos
 }
