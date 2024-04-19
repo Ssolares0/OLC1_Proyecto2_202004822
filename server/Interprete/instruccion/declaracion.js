@@ -5,6 +5,7 @@ const { TipoSimbolo } = require('../symbols/Symbol.js');
 const { TipoDato } = require('../Expresion.js');
 
 
+
 class Declaracion extends instruccion {
     constructor(id, tipo, expresion, line, column) {
         super( line, column);
@@ -44,6 +45,7 @@ class Declaracion extends instruccion {
                 console.log("Error semantico: la variable " + id + " ya fue declarada anteriormente");
                 return;
             }
+            
 
         } else if (this.expresion != null) {
             let value = this.expresion.interpretar(entorno);

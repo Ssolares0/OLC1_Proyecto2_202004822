@@ -10,6 +10,7 @@ const indexController = require('../controller/index.controller.js');
 router.get('/', indexController.index);
 router.post('/analizar', indexController.analizar);
 router.get('/errores', indexController.errores);
+router.get('/simbolos', indexController.simbolos);
 
 
 

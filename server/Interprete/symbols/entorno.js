@@ -1,6 +1,6 @@
 const { TipoDato } = require('../Expresion.js');
 const symbolo1 = require('./Symbol.js');
-
+const sng = require('../singleton/Manager.js');
 
 
 class Entorno {
@@ -24,6 +24,7 @@ class Entorno {
                 return false;
             } else {
                 this.variables.set(separador[i], new symbolo1.Symbol(separador[i], valor, tipo, typedata, line, column));
+                sng.addSymbol(separador[i], valor, tipo, typedata, line, column);
                 console.log("Se guardo la variable: " + separador[i] + " con valor: " + valor);
 
             }
@@ -140,6 +141,7 @@ class Entorno {
                 //console.log("Se guardo el array: " + separador[i] + " con valor: " + new Array(vector));
                 //agregar valores al array
                 this.arrays.set(separador[i], new symbolo1.Symbol(separador[i], new Array(vector), tipo, typedata, this.line, this.column));
+                sng.addSymbol(separador[i], vector+"Posicion", tipo, typedata, line, column);
                 console.log("Se guardo el array: " + separador[i]);
             }
         }

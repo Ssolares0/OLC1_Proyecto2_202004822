@@ -244,6 +244,11 @@ instrWhile
     : WHILE PARIZQ expresion PARDER LLAIZQ listainstruccion LLADER {$$=new Whiles($3,$6,@1.first_line,@1.first_column);}
 ;
 
+inatrDoWHILE
+    : DO LLAIZQ listainstruccion LLADER WHILE PARIZQ expresion PARDER PUNTOCOMA {$$=new DoWhile($3,$7,@1.first_line,@1.first_column);}
+
+;
+
 instrFor
     : FOR PARIZQ for_declaracion  PUNTOCOMA expresion PUNTOCOMA incanddec  PARDER LLAIZQ listainstruccion LLADER {$$=new Fors($3,$5,$7,$10,@1.first_line,@1.first_column);}
  

@@ -134,37 +134,45 @@ export const Home = () => {
                 console.error('Error:', error);
             }
         };
+
+        const getSimbolos = async (e) => {
+            e.preventDefault();
+            try {
+                const response = await fetch('http://localhost:4000/simbolos', {
+                    method: 'GET'
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                const result = await response.json();
+    
+                if (result.salida) {
+                    const blob = new Blob([result.salida], { type: 'text/html' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    document.body.appendChild(a);
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'simbolos.html';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    console.log("Archivo descargado exitosamente.");
+                } else {
+                    console.log("No se recibió HTML válido para descargar.");
+                }
+    
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
    
     
 
     
-    const getSimbolos = async (e) => {
-        e.preventDefault();
-        await fetch('http://localhost:4000/simbolos', {
-            method: 'GET',
-            body: JSON.stringify({
-                entrada: entrada,
-
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(res => res.json())
-
-            .then(result => {
-                // Aquí puedes trabajar con la respuesta JSON recibida
-                //lo mostramos en el text area 2
-                // si el texto recibido es undefined lo omitimos
-
-                //document.querySelector('.text-area2').value = result.salida;
-            })
-            .catch(error => {
-                console.log('Error:', error);
-                // Manejo de errores
-            });
-    };
-
+    
 
     return (
 

@@ -14,6 +14,8 @@ const analizar = (req, res) => {
     const {entrada} = req.body; // se obtiene informacion del body
     //borrar errores
     sng.clearError();
+    //borrar simbolos
+    sng.clearSymbol();
     let result = analizador.parse(entrada); //mandamos a analizar la entrada
     let init = new NodoAst("INICIO");
     let instrucciones = new NodoAst("INSTRUCCIONES");
@@ -64,14 +66,17 @@ const errores = (req, res) => {
 const simbolos = (req, res) => {
    
     try{
-        let c = Entorno.getEntorno();
-        console.log(c);
-
-    } catch (error) {
-        console.log("Hubo un Error al mandar la entrada a interpretar",error);
+        
+        let html = `
+        <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+        ${sng.getSymbol()}
+        </div>
+        `;
+        //console.log(html);
+        res.status(200).json({message: "Funcion Reporte errores",salida:html})
+    } catch{
+        console.log("Hubo un Error al ver symbols");
     }
-    
-    res.status(200).json({message: "Funcion analizar",salida:regreso}) //respuesta
 }
 
 
