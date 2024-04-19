@@ -42,6 +42,7 @@ comentarios "//".* ;
 "return"                { return 'RETURN'; }
 "while"                 { return 'WHILE';}
 "for"                   { return 'FOR';}
+"do"                    { return 'DO';}
 
 "<<"                    { return 'MENOR_MENOR'; }
 "("                     { return 'PARIZQ'; }
@@ -127,6 +128,7 @@ comentarios "//".* ;
     const Continues = require('../Interprete/instruccion/continues.js');
     const Return = require('../Interprete/instruccion/Return.js');
     const Whiles = require('../Interprete/instruccion/Whiles.js');
+    const DoWhile = require('../Interprete/instruccion/DoWhile.js');    
     const Fors = require('../Interprete/instruccion/Fors.js');
     const Asignacion = require('../Interprete/instruccion/Asignacion.js');
     const Funciones = require('../Interprete/instruccion/Funciones.js');
@@ -175,6 +177,7 @@ instruccion
     | returns PUNTOCOMA {$$=$1;}
     | switches {$$=$1;}
     | instrWhile {$$=$1;}
+    | instrDoWHILE {$$=$1;}
     | instrFor {$$=$1;}
     | instrFunciones {$$=$1;}
     | instrMetodos {$$=$1;}
@@ -244,8 +247,8 @@ instrWhile
     : WHILE PARIZQ expresion PARDER LLAIZQ listainstruccion LLADER {$$=new Whiles($3,$6,@1.first_line,@1.first_column);}
 ;
 
-inatrDoWHILE
-    : DO LLAIZQ listainstruccion LLADER WHILE PARIZQ expresion PARDER PUNTOCOMA {$$=new DoWhile($3,$7,@1.first_line,@1.first_column);}
+instrDoWHILE
+    : DO LLAIZQ listainstruccion LLADER WHILE PARIZQ expresion PARDER  {$$=new DoWhile($7,$3,@1.first_line,@1.first_column);}
 
 ;
 

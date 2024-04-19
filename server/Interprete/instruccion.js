@@ -18,6 +18,7 @@ const TipoInstruccion ={
     DECLARACION: 'DECLARACION', 
     SWITCH: 'SWITCH',
     WHILE: 'WHILE',
+    DOWHILE: 'DOWHILE',
     GLOBAL : 'GLOBAL',
     FOR: 'FOR',
     FUNCION: 'FUNCION',
