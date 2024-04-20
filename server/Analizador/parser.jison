@@ -43,6 +43,8 @@ comentarios "//".* ;
 "while"                 { return 'WHILE';}
 "for"                   { return 'FOR';}
 "do"                    { return 'DO';}
+"toLower"               { return 'TOLOWER';}
+"toupper"               { return 'TOUPPER';}
 
 "<<"                    { return 'MENOR_MENOR'; }
 "("                     { return 'PARIZQ'; }
@@ -70,14 +72,15 @@ comentarios "//".* ;
 "=="                    { return 'REL_IGUAL'; }
 "="                     { return 'IGUAL'; }
 
-//ternarios
-"?"                     { return 'TERNARIO'; }
 ":"                     { return 'DOSPUNTOS'; }
 
 //Operadores Logicos
 "||"                   { return 'OR'; }
 "&&"                   { return 'AND'; }
 "!"                     { return 'NOT'; }
+
+//ternarios
+"?"                     { return 'TERNARIO'; }
 
 
 
@@ -134,6 +137,7 @@ comentarios "//".* ;
     const Funciones = require('../Interprete/instruccion/Funciones.js');
     const Metodos = require('../Interprete/instruccion/Metodos.js');
     const Llamada = require('../Interprete/instruccion/llamada.js');
+    const ToLower = require('../Interprete/expresion/ToLower.js');
     const Execute = require('../Interprete/instruccion/execute.js');
     const Error = require('../Interprete/errores/error.js');
     const sng = require('../Interprete/singleton/Manager.js');
@@ -143,14 +147,17 @@ comentarios "//".* ;
 
 %left 'OR' 
 %left 'AND' 
+%left 'TERNARIO'
 %left 'REL_IGUAL' 'DIFERENTE' 'MENOR' 'MENORIGUAL' 'MAYOR'  'MAYORIGUAL'
 %left 'MAS' 'MENOS'
-%left 'DIV' 'POR' 'MODULO'
-%nonassoc 'POTENCIA' 
+%left 'DIV' 'POR' 
+%left 'POTENCIA' 'MODULO'
 
 
 %right 'NOT'
-%left 'TERNARIO'
+
+
+
 
 // -------> Simbolo Inicial
 %start inicio
@@ -310,7 +317,8 @@ expresion
     | expresion OR expresion {$$=new Logicos($1,$3,$2,@1.first_line,@1.first_column);}
     | NOT expresion {$$=new Logicos($2,$2,$1,@1.first_line,@1.first_column);}
     | llamada {$$=$1;}
-    | expresion TERNARIO expresion DOSPUNTOS expresion {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column); }
+    | ternario {$$=$1;}
+    | instrUpAndMin  {$$=$1;}
     | datos {$$=$1;}
 
     ;
@@ -342,6 +350,11 @@ listacasos
     
 ;
 
+ternario
+    : expresion TERNARIO expresion DOSPUNTOS expresion {$$=new Ternario($1,$3,$5,@1.first_line,@1.first_column); }
+
+;
+
 caso 
     : CASE datos DOSPUNTOS listainstruccion {$$={case: $2,body:$4};}
     
@@ -352,7 +365,14 @@ sentenControl
 
 ;
 
-datos : ENTERO {$$=new Dato($1,TipoDato.ENTERO,@1.first_line,@1.first_column);}
+instrUpAndMin
+    : TOLOWER PARIZQ expresion PARDER {$$=new ToLower($1,$3,@1.first_line,@1.first_column);}
+    | TOUPPER PARIZQ expresion PARDER {$$=new ToLower($1,$3,@1.first_line,@1.first_column);}
+
+;
+
+datos : PARIZQ expresion PARDER {$$=$2;}
+        | ENTERO {$$=new Dato($1,TipoDato.ENTERO,@1.first_line,@1.first_column);}
         | DECIMAL {$$=new Dato($1,TipoDato.DECIMAL,@1.first_line,@1.first_column);}
         | CARACTER {$$=new Dato($1,TipoDato.CHAR,@1.first_line,@1.first_column);}
         | CADENA {$$=new Dato($1,TipoDato.CADENA,@1.first_line,@1.first_column);}

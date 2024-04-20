@@ -65,5 +65,22 @@ class DoWhile extends instruccion {
         return value;
 
     }
+    getNodo(){
+        let nodo = new NodoAst("DOWHILE");
+        nodo.agregarHijo("do");
+        nodo.agregarHijo("{");
+        let nodoInstrucciones = new NodoAst("INSTRUCCIONES");
+        for (let i = 0; i < this.instr.length; i++) {
+            nodoInstrucciones.agregarHijoAST(this.instr[i].getNodo());
+        }
+        nodo.agregarHijoAST(nodoInstrucciones);
+        nodo.agregarHijo("}");
+        nodo.agregarHijo("while");
+        nodo.agregarHijo("(");
+        nodo.agregarHijoAST(this.condicion.getNodo());
+        nodo.agregarHijo(")");
+        nodo.agregarHijo(";");
+        return nodo;
+    }
 }
 module.exports = DoWhile;

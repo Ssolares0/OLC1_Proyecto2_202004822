@@ -5,6 +5,8 @@ const {NodoAst} = require('../Interprete/graficar/NodoAst.js');
 const {graficarArbol} = require('../Interprete/graficar/GraficarTree.js');
 const {Entorno} = require('../Interprete/symbols/entorno.js');
 const sng = require('../Interprete/singleton/Manager.js');
+
+
 const index = (req, res) => {
     res.status(200).json({message: "Funcionando"})
 }
@@ -49,8 +51,7 @@ const analizar = (req, res) => {
 const errores = (req, res) => {
 
     try{
-        
-        
+
         let html = `
         <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
         ${sng.getError()}

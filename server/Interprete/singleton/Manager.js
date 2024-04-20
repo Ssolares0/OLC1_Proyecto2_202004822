@@ -73,3 +73,6 @@ function clearSymbol() {
 }
 
 module.exports = { addError, getError, clearError, addSymbol,getSymbol,clearSymbol};
+
+
+
