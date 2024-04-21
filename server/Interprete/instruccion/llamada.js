@@ -152,6 +152,7 @@ class Llamada extends instruccion{
             });
             return value;
         }
+        return value;
     }
 
     getNodo(){

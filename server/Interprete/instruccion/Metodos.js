@@ -31,7 +31,7 @@ class Metodos extends instruccion{
                 console.log("Semantico", `el metodo  '${this.id}' tiene un parametro repetido llamado '${x}'`, this.fila, this.columna);
                 //errores.push(new Error("Semantico", "El parametro " + x + " ya existe en la funcion " + this.id, this.fila, this.columna));
                 error = true;
-                return this.valor;
+                return "Semantico", `el metodo  '${this.id}' tiene un parametro repetido llamado '${x}'`, this.fila, this.columna;
             }
             i++
         });

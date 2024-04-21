@@ -19,7 +19,7 @@ class Logicos extends Expresion {
 
         if (this.op1.tipo != TipoDato.BOOL && this.op2.tipo != TipoDato.BOOL) {
             //Errores semanticos
-            this.tipo == TipoDato.ERROR;
+            this.tipo = TipoDato.ERROR;
             console.log("Existe un Error semantico de tipo de dato");
             return this.valor;
         }

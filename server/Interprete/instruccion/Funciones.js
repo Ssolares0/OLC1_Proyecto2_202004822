@@ -33,7 +33,7 @@ class Funciones extends instruccion{
                 console.log("Semantico", `La funcion  '${this.id}' tiene un parametro repetido llamado '${x}'`, this.fila, this.columna);
                 //errores.push(new Error("Semantico", "El parametro " + x + " ya existe en la funcion " + this.id, this.fila, this.columna));
                 error = true;
-                return this.valor;
+                return "Error Semantico", `La funcion  '${this.id}' tiene un parametro repetido llamado '${x}'`, this.fila, this.columna;
             }
             i++
         });
@@ -43,7 +43,7 @@ class Funciones extends instruccion{
         }
         
         entorno.save_funcion(this.id, this);
-        return '';
+        return this;
         //imprimir 
     
     }

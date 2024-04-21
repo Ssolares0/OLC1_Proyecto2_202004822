@@ -18,7 +18,7 @@ class If extends instruccion {
 
         if (this.condicion.tipo != 'BOOL') {
             console.log('Error semantico: la condicion no es booleana');
-            return this;
+            return "Error semantico: la condicion no es booleana";
         }
         if (String(this.condicion.valor).toLowerCase() === "true") {
 
@@ -32,7 +32,7 @@ class If extends instruccion {
                 }else if (instruccion.tipo == TipoInstruccion.CONTINUE) {
                     this.tipo= TipoInstruccion.CONTINUE;
                     continue;
-                }
+                } 
             }
             
             return value;

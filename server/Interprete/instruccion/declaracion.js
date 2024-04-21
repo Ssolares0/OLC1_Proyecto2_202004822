@@ -43,8 +43,9 @@ class Declaracion extends instruccion {
             let c = entorno.save_variable(id, value, tipo, TipoSimbolo.VARIABLE, this.line, this.column);
             if (!c) {
                 console.log("Error semantico: la variable " + id + " ya fue declarada anteriormente");
-                return;
+                return "Error semantico: la variable " + id + " ya fue declarada anteriormente";
             }
+            return "Variable " + id + " declarada correctamente";
             
 
         } else if (this.expresion != null) {

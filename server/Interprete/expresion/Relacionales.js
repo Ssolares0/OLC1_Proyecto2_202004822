@@ -57,6 +57,11 @@ class Relacionales extends Expresion {
                     this.valor = op1 <= op2;
                     return this.valor;
             }
+        } else{
+            console.log("Error semantico de tipos de datos");
+            this.tipo = TipoDato.ERROR;
+            return this.valor;
+        
         }
     }
     //creamos el nodo del arbol

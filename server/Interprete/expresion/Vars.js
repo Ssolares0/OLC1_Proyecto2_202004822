@@ -25,7 +25,7 @@ class Vars extends Expresion{
         if(value == null){
             console.log("No se encuentra la variable o vector "+this.id);
             this.tipo = "ERROR";
-            return value;
+            return "No se encuentra la variable o vector "+this.id;
         }
         this.tipo = type;
         return value;

@@ -18,7 +18,7 @@ class DoWhile extends instruccion {
         let value = "";
         if (this.condicion.tipo != 'BOOL') {
             console.log('Error semantico: la condicion no es booleana');
-            return this;
+            return "Error semantico: la condicion no es booleana o existe un error en la condicion";
         }
         console.log(this.condicion.valor)
         while (true) {
@@ -54,9 +54,9 @@ class DoWhile extends instruccion {
             let cond = this.condicion.interpretar(entornoWhile);
             if (this.condicion.tipo != 'BOOL') {
                 //Errores semanticos
-                this.tipo == TipoDato.ERROR;
+                this.tipo = TipoDato.ERROR;
                 console.log("Existe un Error semantico de tipo de dato");
-                return this.valor;
+                return "La condicion no es booleana Error! o existe un error en la condicion";
             }
             
 

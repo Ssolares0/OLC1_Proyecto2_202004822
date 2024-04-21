@@ -19,7 +19,7 @@ class ToLower extends Expresion{
             if(this.expresion.tipo == TipoDato.CADENA){
                 return exp.toLowerCase();
             }else{
-                throw new Error("Error Semantico", `No se puede convertir a minusculas el tipo ${this.expresion.tipo}`, this.fila, this.columna);
+                return("Error Semantico", `No se puede convertir a minusculas el tipo ${this.expresion.tipo}`, this.fila, this.columna);
             }
             
         }else{
@@ -29,7 +29,7 @@ class ToLower extends Expresion{
                 
             }else{
                 console.log("Error Semantico", `No se puede convertir a mayusculas el tipo ${this.expresion.tipo}`, this.fila, this.columna)
-                throw new Error("Error Semantico", `No se puede convertir a mayusculas el tipo ${this.expresion.tipo}`, this.fila, this.columna);
+                return("Error Semantico", `No se puede convertir a mayusculas el tipo ${this.expresion.tipo}`, this.fila, this.columna);
 
             }
             

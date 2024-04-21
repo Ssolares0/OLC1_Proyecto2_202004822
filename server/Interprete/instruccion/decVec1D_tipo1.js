@@ -29,7 +29,7 @@ class DecVec1D_tipo1 extends instruccion{
             let c = entorno.save_array(id, exp, tipo2, TipoSimbolo.ARREGLO, this.line, this.column);
             if (!c) {
                 console.log("Error semantico: el arreglo " + id + " ya fue declarado anteriormente");
-                return;
+                return "Error semantico: el arreglo " + id + " ya fue declarado anteriormente";
             }
             return "vector 1D " + id + " creado";
             

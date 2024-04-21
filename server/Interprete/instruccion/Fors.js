@@ -54,7 +54,7 @@ class Fors extends instruccion{
                //Errores semanticos
                this.tipo == TipoDato.ERROR;
                console.log("Existe un Error semantico de tipo de dato");
-               return this.valor;
+               return "La condicion no es booleana Error! o existe un error en la condicion";
             }
             if(this.condicion.valor == false){
                 break;

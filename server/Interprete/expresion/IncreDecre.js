@@ -19,10 +19,11 @@ class IncreDecre extends Expresion {
         if (value == null) {
             console.log("No se encuentra la variable " + this.id);
             this.tipo = "ERROR";
-            return null;
+            return "No se encuentra la variable " + this.id;
         }else if (type != TipoDato.ENTERO) {
+            this.tipo = TipoDatos.ERROR;
             console.log("Error semantico: la variable no es de tipo ENTERO");
-            return null;
+            return this.valor;
         }
         switch (this.tipo) {
             case '++':

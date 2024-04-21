@@ -575,7 +575,7 @@ class Aritmetica extends Expresion {
 
             } else {
                 //Errores semanticos
-                this.tipo == TipoDato.ERROR;
+                this.tipo = TipoDato.ERROR;
                 console.log("Existe un Error semantico de tipo de dato");
                 return this.valor;
             }
@@ -596,7 +596,7 @@ class Aritmetica extends Expresion {
 
             } else {
                 //Errores semanticos
-                this.tipo == TipoDato.ERROR;
+                this.tipo = TipoDato.ERROR;
                 console.log("Existe un Error semantico de tipo de dato");
                 return this.valor;
             }

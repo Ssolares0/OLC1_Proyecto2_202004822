@@ -21,16 +21,16 @@ class Asignacion extends instruccion {
         if (variable == null || variable == undefined) {
             //Errores semanticos
             this.tipo == TipoDato.ERROR;
-            console.log("Existe un Error semantico, la variable no ha sido declarada");
-            return this.valor;
+            
+            return "Existe un Error semantico, la variable no ha sido declarada";   
         }else{
             let c = entorno.actualizar_variable(this.id, value);
             if (!c) {
                 console.log("Error semantico: la variable " + this.id + " no ha sido declarada");
-                return;
+                return "Error semantico: la variable " + this.id + " no ha sido declarada";
             }
         }
-        return "";
+        return ""
 
     }
 }

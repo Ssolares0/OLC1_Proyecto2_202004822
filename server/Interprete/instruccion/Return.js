@@ -14,18 +14,14 @@ class Return extends instruccion{
 
     interpretar(entorno){
         
-        let value ="";
+        let value = this.exp.interpretar(entorno);
+
         
-        if(this.exp != null){
-            value = this.exp.interpretar(entorno);
-        }
-        if(this.exp.tipo == TipoDato.ERROR){
-            console.log("Error semantico: no se pueden retornar errores");
-            return "Error semantico: no se pueden retornar errores, linea: "+this.fila+" columna: "+this.columna;
-        }
-        
-       
         return value;
+        
+        
+        
+
     }
 
     getNodo(){
