@@ -22,7 +22,7 @@ class Whiles extends instruccion{
             console.log('Error semantico: la condicion no es booleana');
             return this;
         }
-        console.log(this.condicion.valor)
+        console.log("este valor"+ this.condicion.valor)
         while(this.condicion.valor){
             let result = TipoInstruccion.WHILE;
             for (let i =0;i<this.instr.length;i++){

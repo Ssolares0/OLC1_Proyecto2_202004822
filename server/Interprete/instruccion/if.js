@@ -9,6 +9,7 @@ class If extends instruccion {
         this.condicion = condicion;
         this.instr = instr;
         this.siNo = siNo;
+        
     }
 
     interpretar(entorno) {
@@ -42,16 +43,24 @@ class If extends instruccion {
             let entornoElse = new Entorno(TipoInstruccion.ELSE, entorno);
             if (this.siNo != null) {
 
-                this.siNo.forEach(instruccion => {
-                    value =instruccion.interpretar(entornoElse);
+                for (let i = 0; i < this.siNo.length; i++) {
+                    let instruccion = this.siNo[i];
+                    value += instruccion.interpretar(entornoElse);
                     value += "\n";
-                });
+                    if (instruccion.tipo == TipoInstruccion.BREAK) {
+                        this.tipo= TipoInstruccion.BREAK;
+                        break;
+                    }else if (instruccion.tipo == TipoInstruccion.CONTINUE) {
+                        this.tipo= TipoInstruccion.CONTINUE;
+                        continue;
+                    }
+                }
                 return value;
 
             } 
-
             //se trabaja else if etc
         }
+        
         return this;
     }
     getNodo() {

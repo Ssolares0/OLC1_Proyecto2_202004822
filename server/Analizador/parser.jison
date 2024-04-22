@@ -156,6 +156,7 @@ comentarios "//".* ;
 
 %right 'NOT'
 
+%nonassoc 'PARIZQ' 'PARDER'
 
 
 
@@ -232,15 +233,15 @@ incanddec
 
 
 instrIf
-    : IF PARIZQ expresion PARDER LLAIZQ listainstruccion LLADER instrElse {$$=new If($3,$6,$8,@1.first_line,@1.first_column);}
+    : IF PARIZQ expresion PARDER blockInstr ELSE blockInstr {$$=new If($3,$5,$7,@1.first_line,@1.first_column);}
+    | IF PARIZQ expresion PARDER blockInstr ELSE instrIf {$$=new If($3,$5,[$7],@1.first_line,@1.first_column);}
+    | IF PARIZQ expresion PARDER blockInstr {$$=new If($3,$5,null,@1.first_line,@1.first_column);}
 ;
 
-instrElse
-    : ELSE LLAIZQ listainstruccion LLADER {$$=$3;}
-    | ELSE instrIf {$$=$2;}
-    | {$$=null;}
+blockInstr 
+    : LLAIZQ listainstruccion LLADER {$$=$2;}
+    | LLAIZQ LLADER {$$=[];}
 ;
-
 
 
 switches    

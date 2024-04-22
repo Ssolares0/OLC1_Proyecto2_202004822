@@ -25,7 +25,7 @@ class Entorno {
             } else {
                 this.variables.set(separador[i], new symbolo1.Symbol(separador[i], valor, tipo, typedata, line, column));
                 sng.addSymbol(separador[i], valor, tipo, typedata, line, column);
-                console.log("Se guardo la variable: " + separador[i] + " con valor: " + valor);
+                console.log("Se guardo la variable: " + separador[i] + " con valor: " + valor+ " tipo de dato: " + tipo);
 
             }
         }
@@ -61,7 +61,7 @@ class Entorno {
     actualizar_variable(nombre, valor) {
         if (this.variables.has(nombre)) {
             this.variables.get(nombre).valor = valor;
-            console.log("Se actualizo la variable: " + nombre + " con valor: " + valor);
+            console.log("Se actualizo la variable: " + nombre + " con valor: " + valor + "tipo de dato: " + this.variables.get(nombre).tipo);
             return true;
         } else {
             if (this.anterior != null) {

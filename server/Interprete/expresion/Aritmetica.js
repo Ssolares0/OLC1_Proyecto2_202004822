@@ -549,7 +549,9 @@ class Aritmetica extends Expresion {
                 console.log("No se puede dividir dos cadenas");
                 this.tipo = TipoDato.ERROR;
                 return this.valor;
-            }
+            } 
+            // no dividir en 0
+           
 
             else {
                 //Errores semanticos

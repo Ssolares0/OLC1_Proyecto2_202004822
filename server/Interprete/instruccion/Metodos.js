@@ -6,7 +6,7 @@ const Breaks = require('./breaks.js');
 
 class Metodos extends instruccion{
     constructor(id,tipo,parametros, instr,fila,columna){
-        super(fila,columna);
+        super(TipoInstruccion.METODO,fila,columna);
         this.id = id;
         this.tipo = tipo;
         this.parametros = parametros;

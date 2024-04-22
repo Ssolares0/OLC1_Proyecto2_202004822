@@ -28,14 +28,19 @@ class Declaracion extends instruccion {
             let value = null;
             if (tipo.toLowerCase() == "int") {
                 value = 0;
+                tipo = TipoDato.ENTERO;
             } else if (tipo.toLowerCase() == "double") {
                 value = 0.0;
+                tipo = TipoDato.DECIMAL;
             } else if (tipo.toLowerCase() == "string") {
                 value = "";
+                tipo= TipoDato.CADENA;
             } else if (tipo.toLowerCase() == "char") {
                 value = ' ';
+                tipo = TipoDato.CHAR;
             } else if (tipo.toLowerCase() == "bool") {
                 value = true;
+                tipo = TipoDato.BOOL;
             }
             console.log("entro a declaracion sin expresion");
             //console.log("Id: " + id + " tipo: " + tipo + " valor: " + this.expresion);
@@ -50,6 +55,7 @@ class Declaracion extends instruccion {
 
         } else if (this.expresion != null) {
             let value = this.expresion.interpretar(entorno);
+            console.log(this.expresion)
             
            
             if (tipo.toLowerCase() == 'int' && this.expresion.tipo == TipoDato.ENTERO|| 
@@ -61,6 +67,7 @@ class Declaracion extends instruccion {
                 
                 
                 let c = entorno.save_variable(id, value, this.expresion.tipo, TipoSimbolo.VARIABLE, this.line, this.column);
+                console.log(this.expresion.tipo)
                 if (!c) {
                     console.log("Error semantico: la variable " + id + " ya fue declarada anteriormente");
                     return ;

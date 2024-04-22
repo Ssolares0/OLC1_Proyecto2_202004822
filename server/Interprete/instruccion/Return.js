@@ -14,7 +14,13 @@ class Return extends instruccion{
 
     interpretar(entorno){
         
+        if (this.exp == null) {
+            return '';
+        }
         let value = this.exp.interpretar(entorno);
+        
+        
+        
 
         
         return value;
@@ -27,7 +33,7 @@ class Return extends instruccion{
     getNodo(){
         let nodo = new NodoAst("RETURN");
         nodo.agregarHijo("return");
-        nodo.agregarHijoAST(this.exp.getNodo());
+        //nodo.agregarHijoAST(this.exp.getNodo());
         nodo.agregarHijo(";");
 
        

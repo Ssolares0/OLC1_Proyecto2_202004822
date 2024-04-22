@@ -39,8 +39,9 @@ const analizar = (req, res) => {
         
 
     } catch (error) {
-        console.log("Hubo un Error al mandar la entrada a interpretar");
+        console.log(error);
         sng.addError(error);
+
     }
     init.agregarHijoAST(instrucciones);
     respuesta = graficarArbol(init);
