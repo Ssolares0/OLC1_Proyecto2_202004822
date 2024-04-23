@@ -45,6 +45,7 @@ comentarios "//".* ;
 "do"                    { return 'DO';}
 "toLower"               { return 'TOLOWER';}
 "toupper"               { return 'TOUPPER';}
+"round"                 { return 'ROUND';}
 
 "<<"                    { return 'MENOR_MENOR'; }
 "("                     { return 'PARIZQ'; }
@@ -116,6 +117,7 @@ comentarios "//".* ;
 %{
     const {TipoDato}= require('../Interprete/Expresion.js');
     const Dato = require('../Interprete/expresion/Dato.js');
+    const Casteo = require('../Interprete/instruccion/Casteo.js');
     const Print = require('../Interprete/instruccion/print.js');
     const Aritmetica =require('../Interprete/expresion/Aritmetica.js');
     const Logicos =require('../Interprete/expresion/Logicos.js');
@@ -138,6 +140,7 @@ comentarios "//".* ;
     const Metodos = require('../Interprete/instruccion/Metodos.js');
     const Llamada = require('../Interprete/instruccion/llamada.js');
     const ToLower = require('../Interprete/expresion/ToLower.js');
+    const ToRound = require('../Interprete/expresion/ToRound.js');
     const Execute = require('../Interprete/instruccion/execute.js');
     const Error = require('../Interprete/errores/error.js');
     const sng = require('../Interprete/singleton/Manager.js');
@@ -178,6 +181,7 @@ listainstruccion
 instruccion
 	: print PUNTOCOMA {$$=$1;}
     | declaraVar PUNTOCOMA {$$=$1;}
+    | casteos  {$$=$1;}
     | declaraVect1D_1 PUNTOCOMA {$$=$1;}
     | asignacion  PUNTOCOMA {$$=$1;}
     | incanddec PUNTOCOMA {$$=$1;}
@@ -320,6 +324,7 @@ expresion
     | llamada {$$=$1;}
     | ternario {$$=$1;}
     | instrUpAndMin  {$$=$1;}
+    | ToRound {$$=$1;}
     | datos {$$=$1;}
 
     ;
@@ -370,6 +375,10 @@ instrUpAndMin
     : TOLOWER PARIZQ expresion PARDER {$$=new ToLower($1,$3,@1.first_line,@1.first_column);}
     | TOUPPER PARIZQ expresion PARDER {$$=new ToLower($1,$3,@1.first_line,@1.first_column);}
 
+;
+
+ToRound 
+    : ROUND PARIZQ expresion PARDER {$$=new ToRound($3,@1.first_line,@1.first_column);}
 ;
 
 datos : PARIZQ expresion PARDER {$$=$2;}

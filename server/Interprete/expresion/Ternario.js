@@ -6,7 +6,7 @@ const { Expresion, TipoDato } = require('../Expresion.js');
 
 class Ternario extends Expresion {
     constructor(condicion,exp1,exp2,fila,columna){
-        super(fila,columna);
+        super("ERROR",TipoDato.ERROR,fila,columna);
         this.condicion = condicion;
         this.exp1 = exp1;
         this.exp2 = exp2;

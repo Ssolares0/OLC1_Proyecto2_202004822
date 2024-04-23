@@ -7,7 +7,7 @@ const { TipoDato } = require('../Expresion.js');
 
 class Return extends instruccion{
     constructor(exp,fila,columna){
-        super(fila,columna);
+        super(TipoInstruccion.RETURN,fila,columna);
         this.exp = exp;
         
     }

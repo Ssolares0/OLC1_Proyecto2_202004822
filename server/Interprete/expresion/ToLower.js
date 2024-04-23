@@ -7,7 +7,7 @@ const Error = require('../errores/error.js');
 
 class ToLower extends Expresion{
     constructor(nombre, expresion,fila, columna){
-        super(fila, columna);
+        super("ERROR", TipoDato.ERROR,fila, columna);
         this.nombre = nombre;
         this.expresion = expresion;
         
@@ -17,6 +17,7 @@ class ToLower extends Expresion{
 
         if (this.nombre.toLowerCase() == "tolower"){
             if(this.expresion.tipo == TipoDato.CADENA){
+                this.tipo = TipoDato.CADENA;
                 return exp.toLowerCase();
             }else{
                 return("Error Semantico", `No se puede convertir a minusculas el tipo ${this.expresion.tipo}`, this.fila, this.columna);
@@ -24,7 +25,7 @@ class ToLower extends Expresion{
             
         }else{
             if (this.expresion.tipo == TipoDato.CADENA){
-                
+                this.tipo = TipoDato.CADENA;
                 return exp.toUpperCase();
                 
             }else{
