@@ -46,6 +46,7 @@ comentarios "//".* ;
 "toLower"               { return 'TOLOWER';}
 "toupper"               { return 'TOUPPER';}
 "round"                 { return 'ROUND';}
+"toString"              { return 'TOSTRING';}
 
 "<<"                    { return 'MENOR_MENOR'; }
 "("                     { return 'PARIZQ'; }
@@ -141,6 +142,7 @@ comentarios "//".* ;
     const Llamada = require('../Interprete/instruccion/llamada.js');
     const ToLower = require('../Interprete/expresion/ToLower.js');
     const ToRound = require('../Interprete/expresion/ToRound.js');
+    const ToString = require('../Interprete/expresion/ToString.js');
     const Execute = require('../Interprete/instruccion/execute.js');
     const Error = require('../Interprete/errores/error.js');
     const sng = require('../Interprete/singleton/Manager.js');
@@ -325,7 +327,9 @@ expresion
     | ternario {$$=$1;}
     | instrUpAndMin  {$$=$1;}
     | ToRound {$$=$1;}
+    | toStr {$$=$1;}
     | datos {$$=$1;}
+
 
     ;
 
@@ -379,6 +383,9 @@ instrUpAndMin
 
 ToRound 
     : ROUND PARIZQ expresion PARDER {$$=new ToRound($3,@1.first_line,@1.first_column);}
+;
+toStr
+    : STD  DOSPUNTOS DOSPUNTOS TOSTRING PARIZQ expresion PARDER {$$=new ToString($6,@1.first_line,@1.first_column);}
 ;
 
 datos : PARIZQ expresion PARDER {$$=$2;}
