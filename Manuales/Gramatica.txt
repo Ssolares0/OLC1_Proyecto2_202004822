@@ -1,0 +1,151 @@
+<inicio> ::= <listainstruccion> <EOF>
+
+
+<listainstruccion> ::= <listainstruccion> <instruccion>
+                    | <instruccion>
+
+
+
+<instruccion> ::= <print> PUNTOCOMA
+                | <declaraVar> PUNTOCOMA 
+                | <casteos>  
+                | <declaraVect1D_1> PUNTOCOMA 
+                | <asignacion>  PUNTOCOMA 
+                | <incanddec> PUNTOCOMA 
+                | <instrIf> 
+                | <returns> PUNTOCOMA 
+                | <switches> 
+                | <instrWhile> 
+                | <instrDoWHILE> 
+                | <instrFor> 
+                | <instrFunciones> 
+                | <instrMetodos> 
+                | <llamada>  PUNTOCOMA
+                | <sentenControl> PUNTOCOMA 
+                | <execute> PUNTOCOMA 
+                | <error> PUNTOCOMA
+
+
+<print> ::= RCOUT MENOR_MENOR <expresion>
+        | RCOUT MENOR_MENOR <expresion> MENOR_MENOR RENDL 
+        | RPRINTLN PARIZQ <expresion> PARDER 
+
+
+
+<declaraVar> ::= <tipos> <listaval> IGUAL <expresion>
+             | <tipos> <listaval>
+
+
+<declaraVect1D_1> ::= <tipos> <listaval> CORCHIZQ CORCHDER IGUAL NEW <tipos> CORCHIZQ <datos> CORCHDER
+
+
+
+<tipos> ::= INT  
+    | STD DOSPUNTOS DOSPUNTOS STRING 
+    | CHAR
+    | BOOL  
+    | DOUBLE 
+
+
+<listaval>
+    : <listaval> COMA VARIABLES 
+    | VARIABLES 
+
+
+<asignacion> ::= VARIABLES IGUAL <expresion>
+
+
+<incanddec> ::= VARIABLES INCREMENTO  
+            | VARIABLES DECREMENTO  
+    
+
+<instrIf> ::= IF PARIZQ <expresion> PARDER <blockInstr> ELSE <blockInstr>
+            | IF PARIZQ <expresion> PARDER <blockInstr> ELSE <instrIf>
+            | IF PARIZQ <expresion> PARDER <blockInstr> 
+
+<returns> ::= RETURN <expresion>
+            | RETURN 
+
+<switches>  ::= SWITCH PARIZQ <expresion> PARDER LLAIZQ <listacasos> DEFAULT DOSPUNTOS <listainstruccion> LLADER 
+            | SWITCH PARIZQ <expresion> PARDER LLAIZQ <listacasos> LLADER 
+            | SWITCH PARIZQ <expresion> PARDER LLAIZQ DEFAULT DOSPUNTOS <listainstruccion> LLADER 
+
+<instrWhile> ::= WHILE PARIZQ <expresion> PARDER LLAIZQ <listainstruccion> LLADER 
+
+
+<instrDoWHILE> ::= DO LLAIZQ <listainstruccion> LLADER WHILE PARIZQ <expresion> PARDER
+
+
+<instrFor>  ::= FOR PARIZQ for_declaracion  PUNTOCOMA <expresion> PUNTOCOMA <incanddec> PARDER LLAIZQ <listainstruccio> LLADER
+
+
+<instrFunciones> ::= <tipos> VARIABLES PARIZQ <listaParametros> PARDER LLAIZQ <listainstruccion> LLADER 
+                | <tipos> VARIABLES PARIZQ PARDER LLAIZQ <listainstruccion> LLADER
+
+
+<instrMetodos> ::= VOID VARIABLES PARIZQ <listaParametros>  PARDER LLAIZQ <listainstruccion> LLADER
+                | VOID VARIABLES PARIZQ PARDER LLAIZQ <listainstruccion> LLADER
+
+
+<llamada> ::=  VARIABLES PARIZQ <llamada_parm> PARDER 
+             | VARIABLES PARIZQ PARDER    
+
+<llamada_parm> ::= <llamada_parm> COMA <expresion>
+                | <expresion> 
+
+
+
+<sentenControl> ::= BREAK
+                |   CONTINUE
+
+
+<execute> ::= EXECUTE VARIABLES PARIZQ <llamada_parm> PARDER  
+          | EXECUTE VARIABLES PARIZQ PARDER
+
+
+<expresion> ::= MENOS <expresion> %prec UMENOS 
+            | <expresion> MENOS <expresion> 
+            | <expresion> POR <expresion> 
+            | <expresion> DIV <expresion> 
+            | <expresion> POTENCIA <expresion> 
+            | <expresion> MODULO <expresion> 
+            | <expresion> REL_IGUAL <expresion> 
+            | <expresion> MENOR <expresion> 
+            | <expresion> MAYOR <expresion> 
+            | <expresion> MENORIGUAL <expresion> 
+            | <expresion> MAYORIGUAL <expresion> 
+            | <expresion> DIFERENTE <expresion> 
+            | <expresion> AND <expresion> 
+            | <expresion> OR <expresion> 
+            | NOT <expresion> 
+            | <llamada>
+            | <ternario >
+            | <instrUpAndMin>
+            | <ToRound>
+            | <toStr>
+            | <datos> 
+
+
+<instrUpAndMin> ::= TOLOWER PARIZQ expresion PARDER
+                | TOUPPER PARIZQ expresion PARDER
+
+
+
+<ToRound> ::= ROUND PARIZQ <expresion> PARDER 
+
+
+<toStr> ::= STD  DOSPUNTOS DOSPUNTOS TOSTRING PARIZQ <expresion> PARDER
+
+
+<datos> ::=  PARIZQ <expresion> PARDER 
+        | ENTERO 
+        | DECIMAL 
+        | CARACTER 
+        | CADENA 
+        | BOOL 
+        | VARIABLES
+
+
+
+
+    
