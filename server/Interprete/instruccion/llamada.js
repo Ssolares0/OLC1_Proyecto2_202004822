@@ -4,6 +4,7 @@ const { NodoAst } = require('../graficar/NodoAst.js');
 const { TipoDato } = require('../Expresion.js');
 const { TipoSimbolo } = require('../symbols/Symbol.js');
 const Breaks = require('./breaks.js');
+const { json } = require('express');
 
 
 class Llamada extends instruccion{
@@ -17,7 +18,6 @@ class Llamada extends instruccion{
 
     interpretar(entorno){
      
-        
         const func = entorno.get_funcion(this.id);
         const metodo = entorno.get_metodo(this.id);
         let value = "";
@@ -32,6 +32,7 @@ class Llamada extends instruccion{
         }
         
         if(func != null && metodo == null){
+            
             if(func.parametros.length != this.parametros.length){
                 //Errores semanticos
                 this.tipo = TipoDato.ERROR;
@@ -49,6 +50,7 @@ class Llamada extends instruccion{
 
             for (let i = 0; i < func.parametros.length; i++) {
                 const elemento = func.parametros[i].split(",")[1];
+                console.log("elemento: "+elemento+" array: "+array[i]);
          
                 if(elemento.toLowerCase()=="int" && array[i] == TipoDato.ENTERO|| 
                     elemento.toLowerCase()=="double" && array[i] == TipoDato.DECIMAL|| 
@@ -66,7 +68,7 @@ class Llamada extends instruccion{
 
             }
             //aqui ya podemos invocar a la funcion
-            const nuevoEntorno = new Entorno(TipoInstruccion.FUNCION,entorno);
+            const nuevoEntorno = new Entorno(TipoInstruccion.LLAMADA,entorno);
             
             let i =0;
             this.parametros.forEach(parametro => {

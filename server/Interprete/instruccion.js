@@ -26,6 +26,7 @@ const TipoInstruccion ={
     BREAK: 'BREAK',
     CONTINUE: 'CONTINUE',
     RETURN: 'RETURN',
+    LLAMADA: 'LLAMADA',
 }
 
 module.exports = {instruccion,TipoInstruccion};

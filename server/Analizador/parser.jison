@@ -299,7 +299,7 @@ llamada
 ;
 
 llamada_parm
-    : llamada_parm 'COMA' expresion  {$$.push($3);$$=$1}
+    : llamada_parm COMA expresion  {$1.push($3);$$=$1}
     | expresion {$$=[$1];}
 ;
 asignacion
@@ -348,7 +348,7 @@ listaval
 ;
 
 listaParametros
-    : listaParametros 'COMA' tipos VARIABLES {$$.push($4 + "," + $3); $$ = $1}
+    : listaParametros 'COMA' tipos VARIABLES {$1.push($4 + "," + $3); $$ = $1}
     | tipos VARIABLES {$$=[$2+","+$1];}
 
 ;

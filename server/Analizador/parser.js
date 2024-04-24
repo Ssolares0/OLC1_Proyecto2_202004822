@@ -187,7 +187,7 @@ case 52:
 this.$=new Llamada($$[$0-2],[],_$[$0-2].first_line,_$[$0-2].first_column);
 break;
 case 53:
-this.$.push($$[$0]);this.$=$$[$0-2]
+$$[$0-2].push($$[$0]);this.$=$$[$0-2]
 break;
 case 54: case 84: case 88:
 this.$=[$$[$0]];
@@ -214,7 +214,7 @@ case 83:
  this.$.push($$[$0]);this.$=$$[$0-2]
 break;
 case 85:
-this.$.push($$[$0] + "," + $$[$0-1]); this.$ = $$[$0-3]
+$$[$0-3].push($$[$0] + "," + $$[$0-1]); this.$ = $$[$0-3]
 break;
 case 86:
 this.$=[$$[$0]+","+$$[$0-1]];

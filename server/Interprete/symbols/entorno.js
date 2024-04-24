@@ -79,6 +79,8 @@ class Entorno {
             return false;
         } else {
             this.funciones.set(nombre, funcion);
+            //guardar en la tabla de simbolos
+            sng.addSymbol(nombre, "Funcion", "FUNCION", "FUNCION", this.line, this.column);
             console.log("Se guardo la funcion: " + nombre);
             return true;
         }
@@ -109,6 +111,7 @@ class Entorno {
             return false;
         } else {
             this.metodos.set(nombre, metodo);
+            sng.addSymbol(nombre, "Metodo", "METODO", "METODO", this.line, this.column);
             console.log("Se guardo el metodo: " + nombre);
             return true;
         }
@@ -123,7 +126,7 @@ class Entorno {
                 if (this.anterior != null) {
                     return entorno.anterior.get_metodo(nombre);
                 } else {
-                    console.log("No se encontro el metodo: " + nombre);
+                    //console.log("No se encontro el metodo: " + nombre);
                     return null;
                 }
             }

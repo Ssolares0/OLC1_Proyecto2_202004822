@@ -22,6 +22,9 @@ class Aritmetica extends Expresion {
 
         let valorizq = this.val1.interpretar(entorno);
         let valorder = this.val2.interpretar(entorno);
+        console.log("estamos aqui vea")
+
+        
         
         if (this.operador == '+') {
             //entero lado izquierdo

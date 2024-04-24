@@ -7,17 +7,19 @@ const { TipoDato } = require('../Expresion.js');
 
 class Return extends instruccion{
     constructor(exp,fila,columna){
-        super(TipoInstruccion.RETURN,fila,columna);
+        super(fila,columna);
         this.exp = exp;
         
     }
 
     interpretar(entorno){
-        
+        let entornoRETURN = new Entorno(TipoInstruccion.RETURN, entorno);
         if (this.exp == null) {
             return '';
         }
-        let value = this.exp.interpretar(entorno);
+        let value = this.exp.interpretar(entornoRETURN);
+
+        console.log("RETURN: " + this.exp.tipo);
         
         
         

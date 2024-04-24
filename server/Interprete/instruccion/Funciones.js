@@ -29,7 +29,7 @@ class Funciones extends instruccion{
                 && array.indexOf(x) >= 0
             ) {
                 //Errores semanticos 
-                this.tipo == TipoDato.ERROR;   
+                this.tipo = TipoDato.ERROR;   
                 console.log("Semantico", `La funcion  '${this.id}' tiene un parametro repetido llamado '${x}'`, this.fila, this.columna);
                 //errores.push(new Error("Semantico", "El parametro " + x + " ya existe en la funcion " + this.id, this.fila, this.columna));
                 error = true;
